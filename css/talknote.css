@@ -1,0 +1,1558 @@
+/* ===== カーテン（青）アニメーション ===== */
+@property --ring { syntax:'<percentage>'; inherits:false; initial-value:0%; }
+
+.intro-curtain{
+  position:fixed; inset:0; background:#0f46ff; z-index:900;
+  -webkit-mask: radial-gradient(circle at 50% 100%,
+                  #000 calc(100% - var(--ring)),
+                  transparent calc(100% - var(--ring) + 1px));
+          mask: radial-gradient(circle at 50% 100%,
+                  #000 calc(100% - var(--ring)),
+                  transparent calc(100% - var(--ring) + 1px));
+  transition: opacity .6s ease .1s, --ring 1.8s cubic-bezier(.16,.8,.2,1);
+}
+
+.intro-curtain.is-reveal-bg{ --ring:110%; }
+.intro-curtain.is-hide{ opacity:0; pointer-events:none; }
+
+
+
+
+
+/* ===== 文字アニメーション ===== */
+
+/* 一文字化 */
+.split-chars .char{ display:inline-block; white-space:pre; }
+
+/* 入口アニメ時に隠す */
+body.has-reveal .split-chars .char{
+  opacity:0 !important;
+  transform: translateY(.6em) rotate(2deg) scale(.98) !important;
+}
+
+/* デフォルト効果 */
+@keyframes charIn{
+  0%  { opacity:0; transform: translateY(.6em) rotate(4deg) scale(.98); }
+  60% { opacity:1; transform: translateY(-.06em) rotate(0deg) scale(1.01); }
+  100%{ opacity:1; transform:none; }
+}
+body.has-reveal.is-ready .split-chars:not([data-fx]) .char{
+  animation: charIn .8s cubic-bezier(.2,.7,.25,1) both;
+  animation-delay: calc(var(--base, .6s) + var(--i,0) * var(--stagger, .03s));
+}
+
+/* Pop効果 */
+@keyframes charRise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+body.has-reveal.is-ready .split-chars[data-fx="pop"] .char{
+  animation: charRise .55s cubic-bezier(.22,1,.23,1) both;
+  animation-delay: calc(var(--base, .5s) + var(--i, 0) * var(--stagger, .03s));
+}
+
+/* 下線スイープ */
+.main-title .line{ position:relative; }
+.main-title .line::after{
+  content:""; position:absolute; left:0; bottom:-.08em;
+  height:.18em; width:0; border-radius:999px;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.95) 45%, rgba(255,255,255,0));
+  transition: width .9s cubic-bezier(.22,1,.23,1);
+  transition-delay: var(--sweep-delay, 1.0s);
+}
+body.has-reveal.is-ready .main-title .line::after{ width:100%; }
+
+/* タイトル調整 */
+.main-title .nowrap{ white-space:nowrap; display:inline-block; }
+@media (max-width:880px){ .main-title .nowrap{ white-space:normal; } }
+.main-title{ line-break: strict; word-break: keep-all; }
+
+
+
+
+
+/* ===== 背景等 ===== */
+:root{
+  --c-blue:#0f46ff; --c-blue-d:#0d34c9; --c-yellow:#f2bd11; --c-text:#0a0a0a;
+  --max:1200px;
+  /* decor tuning */
+  --cloud-alpha:.55; --cactus-alpha:.48; --decor-sat:.75; --decor-bright:1.05; --decor-contrast:1; --decor-blur:.3px;
+}
+
+.container{max-width:var(--max);margin-inline:auto;padding-inline:16px}
+
+/* Header (minimal) */
+.site-header{position:fixed;inset-block-start:0;inset-inline:0;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:50;background:transparent;color:#fff}
+.site-header .logo{font-weight:800;letter-spacing:.3px;color:#fff}
+.global-nav a{color:#fff;margin-inline:12px;font-weight:600;opacity:.95}
+.global-nav .btn-outline{padding:8px 14px;border:2px solid #fff;border-radius:24px}
+.nav-toggle{display:none}
+
+/* ===== Background Sections ===== */
+.bg-section{
+  position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background-size:cover;background-position:center top;background-repeat:no-repeat;background-attachment:fixed;
+}
+.bg1{background-image:url("../images/haikei3.jpg")}
+.bg2{background-image:url("../images/haikei2.jpg")}
+.bg3{background-image:url("../images/haikei3.jpg")}
+
+.bg-overlay{background:rgba(255,255,255,.6);padding:40px;border-radius:12px}
+/* Logo-only section (not full height) */
+.bg-section.logos{min-height:auto;padding:56px 0 72px;justify-content:center}
+
+/* ===== Decoration Layering ===== */
+.bg-decor{position:absolute;inset:0;z-index:1;pointer-events:none}
+.bg-section>:not(.bg-decor){position:relative;z-index:2}
+
+/* ===== Parallax Controls ===== */
+.has-decor{--decor-shift:0px;--shift-cactus:0px;--shift-cloud:0px}
+
+/* ===== Decor Base ===== */
+.decor{position:absolute;will-change:transform;--tx:0px;--ty:0px}
+
+/* Cactus (LL) */
+.decor-cactus{
+  left:clamp(-40px,-4vw,-12px);bottom:clamp(-20px,-4vh,-8px);
+  width:clamp(160px,22vw,360px);opacity:.95;mix-blend-mode:normal;
+  filter:saturate(var(--decor-sat)) brightness(var(--decor-bright)) contrast(var(--decor-contrast)) blur(var(--decor-blur));
+  transform:translate3d(var(--tx),calc(var(--ty) + var(--shift-cactus)),0)
+}
+/* Cloud (UR) */
+.decor-cloud{
+  right:clamp(-60px,-6vw,-16px);top:clamp(12px,2vh,32px);
+  width:clamp(220px,28vw,520px);opacity:.92;mix-blend-mode:normal;
+  filter:saturate(var(--decor-sat)) brightness(var(--decor-bright)) contrast(var(--decor-contrast)) blur(var(--decor-blur));
+  transform:translate3d(var(--tx),calc(var(--ty) + var(--shift-cloud)),0)
+}
+
+/* Show cactus higher inside .has-decor (keeps original intent) */
+.has-decor .decor-cactus{bottom:clamp(50px,12vh,150px)}
+/* Apply subtle global shift on scroll to any .decor under .has-decor if desired */
+.has-decor .decor{transform:translate3d(var(--tx),calc(var(--ty) + var(--decor-shift)),0)}
+
+/* Extra clouds */
+.has-decor .decor-cloud:nth-of-type(2){
+  left:auto;top:auto;right:clamp(60px,10vw,270px);bottom:clamp(60px,12vh,250px);
+  width:clamp(220px,28vw,520px);opacity:.92
+}
+.has-decor .decor-cloud:nth-of-type(3){
+  right:clamp(160px,14vw,320px);top:clamp(40px,6vh,140px);
+  width:clamp(200px,26vw,460px);opacity:.88
+}
+
+/* Opacity bindings via CSS variables */
+.decor-cloud{opacity:var(--cloud-alpha)}
+.decor-cactus{opacity:var(--cactus-alpha)}
+
+/* ===== Appearing Section ===== */
+.fade-section{opacity:0;transform:translateY(40px);transition:opacity .9s ease,transform .9s ease;will-change:opacity,transform}
+.fade-section.is-visible{opacity:1;transform:none}
+
+/* ===== Level 2 Decorations (outer sprinkled) ===== */
+.decor-lvl2{position:absolute;will-change:transform;opacity:.9;filter:drop-shadow(0 6px 18px rgba(0,0,0,.12));transform:translate3d(0,var(--decor-shift,0px),0)}
+.decor-lvl2-a{top:-2vw;left:-6vw;width:clamp(140px,20vw,320px);rotate:-4deg}
+.decor-lvl2-b{right:-8vw;bottom:-4vw;width:clamp(160px,24vw,380px);rotate:3deg}
+.decor-lvl2-c{top:-3vw;right:18vw;width:clamp(120px,18vw,280px);rotate:-2deg}
+
+/* ===== Responsive ===== */
+@media (max-width:1024px){
+  .decor-cactus{width:clamp(140px,28vw,280px);left:-4vw}
+  .decor-cloud{width:clamp(180px,36vw,420px);right:-5vw}
+}
+@media (max-width:768px){
+  .decor-lvl2-a{top:-1vw;left:-2vw;width:clamp(120px,34vw,240px)}
+  .decor-lvl2-b{right:-3vw;bottom:-2vw;width:clamp(140px,36vw,300px)}
+  .decor-lvl2-c{top:2vw;right:6vw;width:clamp(110px,28vw,220px)}
+}
+
+
+
+
+
+
+/* ==== Header（枠なし・非固定・常時表示） ==== */
+.site-header{
+  position:relative; z-index:10; background:transparent; border:none;
+  padding:16px 40px; height:76px;
+}
+
+/* ==== Brand Logo（左上固定・1.5倍） ==== */
+.brand-logo{
+  position:fixed; top:0; left:0; z-index:1000; display:flex; align-items:center; gap:18px;
+  background:#fff; padding:33px 48px 33px 42px; border-radius:0 0 120px 0;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);
+  transform-origin:left top; transition:transform .25s ease, padding .25s ease, border-radius .25s ease;
+}
+.brand-logo img{ width:66px; height:66px; object-fit:contain }
+.brand-text{ font-family:'TalknoteFont','Noto Sans JP',sans-serif; font-size:39px; font-weight:700; color:#111; line-height:1 }
+
+/* ==== Scroll shrink ==== */
+body.is-shrink .brand-logo{ transform:scale(.6); padding:26px 40px 26px 34px; border-radius:0 0 90px 0 }
+body.is-shrink .brand-logo img{ width:58px; height:58px }
+body.is-shrink .brand-text{ font-size:34px }
+
+/* ==== Global Nav（最上部でフェードイン） ==== */
+.global-nav,.nav-toggle{ opacity:0; transform:translateY(-10px); transition:opacity .35s ease, transform .35s ease }
+.is-at-top .global-nav,.is-at-top .nav-toggle{ opacity:1; transform:none }
+
+/* ==== CTA ==== */
+.cta{
+  text-align:center; margin:80px auto; padding:40px 24px;
+  background:var(--c-bg); border:1px solid var(--c-line); border-radius:var(--radius);
+}
+.cta .btn-primary{ margin-top:16px; border-radius:999px }
+
+/* ==== Footer ==== */
+.site-footer{
+  border-top:1px solid var(--c-line); background:#fff;
+  display:flex; gap:16px; align-items:center; justify-content:space-between;
+}
+
+/* ==== Skip link (a11y) ==== */
+.skip{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
+.skip:focus{ position:static; width:auto; height:auto; padding:8px; background:#000; color:#fff }
+
+/* ==== Responsive (≤640px) ==== */
+@media (max-width:640px){
+  .site-header{ padding:12px 16px; height:64px }
+  .brand-logo{ padding:20px 24px 20px 18px; border-radius:0 0 72px 0; gap:12px }
+  .brand-logo img{ width:40px; height:40px }
+  .brand-text{ font-size:22px }
+}
+
+
+
+
+/* ========================================================================== */
+/* == HERO セクション（memo.css 抜粋・整理）ここから ========================== */
+/* ========================================================================== */
+
+/* -------------------------------------------------------------------------- */
+/* [A] Hero（共通）                                                            */
+/* -------------------------------------------------------------------------- */
+/* ============ Hero ============ */
+.hero{
+  min-height:100vh; display:flex; align-items:center; /* full-screen */
+  background: radial-gradient(1200px 400px at 50% -120px, #f7f7f9 0%, #fff 60%);
+  padding:96px 0 48px;
+}
+.hero-inner{ max-width:var(--max); margin:auto; padding:0 16px; }
+.hero p{ margin:12px 0 18px; }
+.hero .btn-primary{ border-radius:999px; padding:12px 22px; font-weight:600; }
+
+/* -------------------------------------------------------------------------- */
+/* [B] Hero（Split バリアント）                                                */
+/* -------------------------------------------------------------------------- */
+/* Splitバリアント */
+.hero--split{ background:transparent; color:#111; padding:80px 0; }
+.hero--split .hero-inner{
+  display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:40px;
+}
+.hero-text .eyebrow{ font-size:18px; font-weight:600; opacity:.9; margin-bottom:8px; }
+.hero-text h1{ font-size:44px; line-height:1.2; margin:0 0 16px; }
+.hero-text .lead{ font-size:18px; margin-bottom:28px; opacity:.95; }
+.hero-buttons{ display:flex; gap:16px; flex-wrap:wrap; }
+.btn-large{ padding:14px 28px; font-size:18px; border-radius:28px; }
+.btn-secondary{ background:#fff; color:#0f46ff; border:2px solid #fff; }
+.btn-secondary:hover{ background:transparent; color:#fff; }
+.hero-image img{
+  width: clamp(820px, 60vw, 1280px); /* 画面幅で拡大 */
+  max-width: none;                   /* 親の100%制限を外す */
+  height: auto;
+  display: block;
+  border-radius: 18px;
+  box-shadow: none;                  /* 影いらない */
+}
+
+/* -------------------------------------------------------------------------- */
+/* [C] レスポンシブ（Split の1カラム化 等）                                    */
+/* -------------------------------------------------------------------------- */
+@media(max-width:900px){
+  .hero--split .hero-inner{ grid-template-columns:1fr; text-align:center; }
+  .hero-buttons{ justify-content:center; }
+  .hero-image{ order:-1; }
+}
+
+/* -------------------------------------------------------------------------- */
+/* [D] Hero + ロゴ併設（任意）                                                 */
+/* -------------------------------------------------------------------------- */
+.hero .logo-wall{ margin:32px auto 0; }
+.hero .logo-wall h2{ font-size:20px; margin-bottom:12px; }
+.hero .logo-track img{ height:56px; margin:0 28px; }
+
+/* 小画面向け（ロゴ画像サイズ調整） */
+@media (max-width:640px){
+  .hero .logo-track img{ height:40px; margin:0 16px; }
+}
+
+/* -------------------------------------------------------------------------- */
+/* [E] Hero（共通その2・パディング差分等）                                     */
+/* -------------------------------------------------------------------------- */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 96px 0 64px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* [F] Hero Split レイアウト（別指定）                                         */
+/* -------------------------------------------------------------------------- */
+.hero--split .hero-inner {
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 48px;
+  align-items: center;
+}
+
+/* -------------------------------------------------------------------------- */
+/* [G] Hero Blue バリエーション                                                */
+/* -------------------------------------------------------------------------- */
+.hero--blue {
+  background:
+    radial-gradient(900px 420px at 15% 35%, rgba(255,255,255,.16), transparent 60%),
+    radial-gradient(1200px 520px at 85% 70%, rgba(255,255,255,.12), transparent 60%),
+    var(--c-blue);
+  color: #fff;
+}
+
+/* -------------------------------------------------------------------------- */
+/* [H] Hero テキスト関連                                                       */
+/* -------------------------------------------------------------------------- */
+.hero-text .eyebrow { font-size: 18px; font-weight: 700; opacity: .95; margin-bottom: 12px; }
+.hero-title { font-size: clamp(32px,6vw,64px); line-height: 1.12; margin: 0 0 20px; }
+.hero-title .brand { font-weight: 800; }
+.hero p { margin: 12px 0 18px; }
+
+/* -------------------------------------------------------------------------- */
+/* [I] Hero ボタン関連                                                         */
+/* -------------------------------------------------------------------------- */
+.hero-buttons { display:flex; gap:16px; flex-wrap:wrap; }
+.btn-large { padding:16px 28px; font-size:18px; border-radius:999px; display:inline-flex; gap:8px; align-items:center; font-weight:700; }
+.btn-primary { background:var(--c-yellow); color:#222; box-shadow:0 8px 20px rgba(0,0,0,.18); }
+.btn-primary:hover { filter:brightness(1.05); }
+.btn-secondary { background:#fff; color:var(--c-blue); border:2px solid #fff; }
+.btn-secondary:hover { background:transparent; color:#fff; }
+.btn-large small { display:block; font-size:12px; font-weight:800; opacity:.85; line-height:1; }
+
+/* -------------------------------------------------------------------------- */
+/* [J] Hero 画像（影あり・3D回転版）                                           */
+/* -------------------------------------------------------------------------- */
+.hero-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 22px;
+  box-shadow: 0 18px 40px rgba(0,0,0,.35);
+  transform: perspective(1200px) rotateY(-6deg) translateY(6px);
+}
+
+/* -------------------------------------------------------------------------- */
+/* [K] Hero デコレーション                                                      */
+/* -------------------------------------------------------------------------- */
+.hero-decor {
+  position: absolute;
+  inset-block: auto 0;
+  width: 28vw;
+  max-width: 340px;
+  aspect-ratio: 1/1;
+  background: radial-gradient(50% 50% at 50% 50%, rgba(255,255,255,.9), rgba(255,255,255,0) 70%);
+  filter: blur(6px);
+}
+.hero-decor--left { left: -6vw; top: 24vh; }
+.hero-decor--right { right: -4vw; bottom: 8vh; }
+
+/* -------------------------------------------------------------------------- */
+/* [L] レスポンシブ調整（Hero Blue 含む）                                      */
+/* -------------------------------------------------------------------------- */
+@media(max-width:980px){
+  .hero--split .hero-inner { grid-template-columns:1fr; text-align:center; }
+  .hero-image { order:-1; }
+  .hero { padding:88px 0 48px; }
+  .global-nav { display:none }
+  .nav-toggle { display:block; color:#fff; background:none; border:0; }
+}
+
+/* -------------------------------------------------------------------------- */
+/* [M] 既存ボタンとの整合（上書き）                                             */
+/* -------------------------------------------------------------------------- */
+.btn-secondary { border-color:#fff; }
+
+/* -------------------------------------------------------------------------- */
+/* [N] Hero 基盤（背景画像版）                                                  */
+/* -------------------------------------------------------------------------- */
+.hero--bg {
+  background-image: url("../images/haikei3.jpg");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 96px 0 64px;
+  color: #fff;
+}
+.hero--split .hero-inner {
+  display:grid; grid-template-columns:1.1fr .9fr;
+  align-items:center; gap:48px;
+}
+.hero-text .eyebrow { font-size:18px; font-weight:700; margin-bottom:12px; }
+.hero-title { font-size:clamp(32px,6vw,60px); line-height:1.15; margin:0 0 20px; }
+.hero-title .brand { font-weight:800; }
+.hero-buttons { display:flex; gap:16px; flex-wrap:wrap; }
+
+/* -------------------------------------------------------------------------- */
+/* [O] ボタン再定義（背景画像版との整合）                                       */
+/* -------------------------------------------------------------------------- */
+.btn-large { padding:16px 28px; font-size:18px; border-radius:999px; font-weight:700; }
+.btn-primary { background:#f2bd11; color:#222; box-shadow:0 8px 20px rgba(0,0,0,.18); }
+.btn-primary:hover { filter:brightness(1.05); }
+.btn-secondary { background:#fff; color:#0f46ff; border:2px solid #fff; }
+.btn-secondary:hover { background:transparent; color:#fff; }
+.btn-large small { display:block; font-size:12px; font-weight:800; opacity:.85; line-height:1; }
+
+/* -------------------------------------------------------------------------- */
+/* [P] Hero 画像（右配置・再掲）                                                */
+/* -------------------------------------------------------------------------- */
+.hero-image img {
+  width: 100%; height: auto; display:block;
+  border-radius: 22px;
+  box-shadow: 0 18px 40px rgba(0,0,0,.35);
+  transform: perspective(1200px) rotateY(-6deg) translateY(6px);
+}
+
+/* -------------------------------------------------------------------------- */
+/* [Q] レスポンシブ（背景画像版用）                                             */
+/* -------------------------------------------------------------------------- */
+@media(max-width:900px){
+  .hero--split .hero-inner { grid-template-columns:1fr; text-align:center; }
+  .hero-image { order:-1; }
+  .hero--bg { padding:80px 0 48px; }
+}
+
+/* -------------------------------------------------------------------------- */
+/* [R] フォント読み込み + Hero テキスト装飾                                     */
+/* -------------------------------------------------------------------------- */
+@font-face {
+  font-family: 'TalknoteFont';
+  src: url('fonts/-F62fjtqLzI2JPCgQBnw7HFow2oe2EcP5pp0erwTqsSWs9Jezazjcb4.105.woff2') format('woff2'),
+       url('fonts/-F62fjtqLzI2JPCgQBnw7HFow2oe2EcP5pp0erwTqsSWs9Jezazjcb4.100.woff2') format('woff2'),
+       url('fonts/-F62fjtqLzI2JPCgQBnw7HFYwQgP.woff2') format('woff2');
+  font-weight: 100 700;
+  font-style: normal;
+  font-display: swap;
+}
+.hero-text {
+  font-family: 'TalknoteFont', 'Noto Sans JP', sans-serif;
+  color: #fff;
+  text-align: left;
+  max-width: 650px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* [S] テキスト細部（大見出し・ブランド等）                                     */
+/* -------------------------------------------------------------------------- */
+/* eyebrow */
+.hero-text .eyebrow {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #ffffff;
+  opacity: 0.95;
+}
+/* メインタイトル */
+.hero-text .main-title {
+  font-size: 60px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 24px;
+  color: #ffffff;
+}
+/* ブランド名 LeadCast */
+.hero-text .brand {
+  font-size: 75px;
+  font-weight: 700;
+  margin-bottom: 36px;
+  color: #ffffff;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+/* -------------------------------------------------------------------------- */
+/* [T] 固定ヘッダー（Hero関連）                                                */
+/* -------------------------------------------------------------------------- */
+.site-header {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  z-index: 1000;
+}
+
+/* -------------------------------------------------------------------------- */
+/* [U] レイアウト強化：2カラム分離・折返し調整                                  */
+/* -------------------------------------------------------------------------- */
+/* 画像と文字をきちんと2カラムに分離（干渉しない） */
+.hero-inner{
+  display: grid;
+  grid-template-columns: minmax(560px, 1fr) minmax(560px, 1fr); /* 左=文字, 右=画像 */
+  align-items: center;
+  column-gap: clamp(24px, 5vw, 64px);
+}
+/* 文字側の幅を確保（狭すぎによる変な改行を防ぐ） */
+.hero-text{
+  max-width: 640px;  /* 好みで 600–680px で微調整 */
+}
+/* 右側モックのサイズ（Talknote比の控えめサイズ） */
+.hero-image{ justify-self: end; }
+.hero-image img{
+  width: clamp(620px, 44vw, 920px);
+  max-width: none;
+  height: auto;
+  border-radius: 18px;
+  box-shadow: none;
+}
+/* 見出しの改行を自然に（以前の nowrap / break-all を打ち消す） */
+.hero-text .main-title,
+.hero-text h1{
+  white-space: normal; word-break: keep-all; overflow-wrap: normal;
+  line-break: strict; -webkit-hyphens: none; hyphens: none;
+  text-wrap: balance; line-height: 1.2;
+}
+/* タブレット以下は縦積み */
+@media (max-width: 1024px){
+  .hero-inner{
+    grid-template-columns: 1fr;
+    row-gap: 24px;
+  }
+  .hero-text{ max-width: 92vw; }
+  .hero-image{ justify-self: center; }
+  .hero-image img{ width: min(92vw, 640px); }
+}
+
+/* -------------------------------------------------------------------------- */
+/* [V] アニメーション：.is-hero-in／has-reveal                                 */
+/* -------------------------------------------------------------------------- */
+/* ヒーローの中身は最初はうっすら隠す */
+.hero .hero-text,
+.hero .hero-image{ 
+  opacity: 0; 
+  transform: translateY(10px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+/* ちょいステップ（文が順に出る） */
+.hero .hero-text > *{ 
+  opacity: 0; transform: translateY(12px);
+  transition: opacity .6s ease, transform .6s ease; 
+}
+.is-hero-in .hero-text > .eyebrow{ transition-delay: .10s; opacity:1; transform:none; }
+.is-hero-in .hero-text > .main-title{ transition-delay: .22s; opacity:1; transform:none; }
+.is-hero-in .hero-text > .brand{ transition-delay: .34s; opacity:1; transform:none; }
+.is-hero-in .hero-buttons{ transition-delay: .46s; opacity:1; transform:none; }
+/* 画像はテキストの少し後 */
+.is-hero-in .hero-image{ transition-delay: .28s; opacity:1; transform:none; }
+/* 低速回線/環境向け：動きが苦手な人にはアニメをオフに */
+@media (prefers-reduced-motion: reduce){
+  .intro-curtain{ transition: none; }
+  .hero .hero-text, .hero .hero-image, .hero .hero-text > *{
+    transition: none; opacity: 1 !important; transform: none !important;
+  }
+}
+
+/* has-reveal：初期非表示 */
+body.has-reveal .hero .eyebrow,
+body.has-reveal .hero .main-title,
+body.has-reveal .hero .brand,
+body.has-reveal .hero .hero-image {
+  opacity: 0;
+  transform: translateY(14px);
+}
+/* has-reveal：is-ready でフェードイン */
+body.has-reveal.is-ready .hero .eyebrow   { animation: fadeUp .50s   .05s both ease-out; }
+body.has-reveal.is-ready .hero .main-title{ animation: fadeUp .60s   .15s both ease-out; }
+body.has-reveal.is-ready .hero .brand     { animation: fadeUp .60s   .28s both ease-out; }
+body.has-reveal.is-ready .hero .hero-image{ animation: fadeUp .70s   .32s both ease-out; }
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(14px); }
+  to   { opacity:1; transform: none; }
+}
+/* 念のため：何かの上書きで透明になっていた場合の保険 */
+.hero .eyebrow,
+.hero .main-title,
+.hero .brand,
+.hero .hero-image { will-change: opacity, transform; }
+/* デフォルトは常に見える */
+.hero .hero-text,
+.hero .hero-text > *,
+.hero .brand,
+.hero .hero-buttons,
+.hero .hero-image{
+  opacity: 1 !important;
+  transform: none !important;
+}
+/* has-reveal の時だけ一旦隠す */
+body.has-reveal .hero .hero-text > *,
+body.has-reveal .hero .hero-image{
+  opacity: 0 !important;
+  transform: translateY(12px) !important;
+}
+/* has-reveal：順にフェードイン */
+body.has-reveal.is-ready .hero .eyebrow{
+  opacity: 1 !important; transform: none !important;
+  transition: opacity .55s ease, transform .55s ease; transition-delay: .08s;
+}
+body.has-reveal.is-ready .hero .main-title{
+  opacity: 1 !important; transform: none !important;
+  transition: opacity .60s ease, transform .60s ease; transition-delay: .18s;
+}
+body.has-reveal.is-ready .hero .brand{
+  opacity: 1 !important; transform: none !important;
+  transition: opacity .60s ease, transform .60s ease; transition-delay: .30s;
+}
+body.has-reveal.is-ready .hero .hero-buttons{
+  opacity: 1 !important; transform: none !important;
+  transition: opacity .60s ease, transform .60s ease; transition-delay: .42s;
+}
+body.has-reveal.is-ready .hero .hero-image{
+  opacity: 1 !important; transform: none !important;
+  transition: opacity .65s ease, transform .65s ease; transition-delay: .28s;
+}
+/* 画像とボタンは“ゆったり”遅らせる */
+body.has-reveal .hero .hero-image{
+  opacity:0 !important; transform: translateY(12px) scale(.985) !important;
+}
+body.has-reveal.is-ready .hero .hero-image{
+  transition: opacity .9s ease, transform .9s ease;
+  transition-delay: 1.1s;          /* ← 文字よりさらに遅く */
+  opacity:1 !important; transform:none !important;
+}
+body.has-reveal .hero .hero-buttons{
+  opacity:0 !important; transform: translateY(10px) !important;
+}
+body.has-reveal.is-ready .hero .hero-buttons{
+  transition: opacity .7s ease, transform .7s ease;
+  transition-delay: 1.2s;
+  opacity:1 !important; transform:none !important;
+}
+/* 背景が青いので念のため文字色を白固定 */
+.hero .eyebrow, .hero .main-title, .hero .brand{ color:#fff; }
+/* prefers-reduced-motion 配慮（追記分） */
+@media (prefers-reduced-motion: reduce){
+  .intro-curtain{ transition: none; -webkit-mask:none; mask:none; }
+  body.has-reveal .split-chars .char,
+  body.has-reveal .hero .hero-image,
+  body.has-reveal .hero .hero-buttons{
+    opacity:1 !important; transform:none !important; animation:none !important;
+  }
+}
+/* 文字は普通に折り返しOK、空白は普通の空白として扱う */
+.split-chars .char{
+  display:inline-block;
+  white-space: normal;        /* ← 重要: pre を封印 */
+  vertical-align: baseline;
+}
+/* 日本語の禁則などをやや厳密に */
+.hero .main-title{
+  line-break: strict;         /* 句読点などの禁則を厳密に */
+  word-break: keep-all;       /* 日本語にはほぼ影響ないが英数字の崩れを抑える */
+}
+
+/* -------------------------------------------------------------------------- */
+/* [W] 背景消失後の遅延（fade-section 用）                                      */
+/* -------------------------------------------------------------------------- */
+/* Heroのブロック（画像/CTA）を背景消失後に少し遅らせて出す */
+.hero .hero-inner.fade-section.is-visible{
+  transition-delay: .9s;  /* 0.6〜1.2sでお好み調整 */
+}
+
+/* ========================================================================== */
+/* == HERO セクション（memo.css 抜粋・整理）ここまで ========================== */
+/* ========================================================================== */
+
+
+/* ========================================================================== */
+/* == STATS（導入実績）セクション ここから ================================== */
+/* ========================================================================== */
+
+/* -------------------------------------------------------------------------- */
+/* [A] フェードイン演出                                                       */
+/* -------------------------------------------------------------------------- */
+.stats-band {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity .8s ease, transform .8s ease;
+}
+.stats-band.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* -------------------------------------------------------------------------- */
+/* [B] 全体レイアウト                                                         */
+/* -------------------------------------------------------------------------- */
+.stats-band {
+  color: #fff;
+  text-align: center;
+  padding: clamp(36px, 7vh, 96px) 0;
+  margin-top: -6px; /* hero との境界を消す */
+  background: #0f46ff; /* デフォルト：濃い青 */
+}
+.stats-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(6px, 1vw, 10px);
+  max-width: 1100px;
+  margin-inline: auto;
+}
+
+/* -------------------------------------------------------------------------- */
+/* [C] 実績バッジ（見出し）                                                   */
+/* -------------------------------------------------------------------------- */
+.stats-badge {
+  display: inline-block;
+  background: #0f46ff; /* 青い帯（背景透過版と排他） */
+  color: #fff;
+  font-weight: 800;
+  font-size: clamp(32px, 5vw, 64px);
+  line-height: 1.06;
+  letter-spacing: .01em;
+  padding: 10px 22px;
+  border-radius: 12px;
+  margin: 0;
+  text-shadow: 0 2px 10px rgba(0,0,0,.2);
+}
+
+/* -------------------------------------------------------------------------- */
+/* [D] 説明文                                                                 */
+/* -------------------------------------------------------------------------- */
+.stats-note {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(16px, 1.6vw, 22px);
+  line-height: 1.55;
+  opacity: .98;
+  max-width: min(80ch, 960px);
+  text-wrap: balance;
+}
+
+/* -------------------------------------------------------------------------- */
+/* [E] 背景を hero とつなげたい場合                                           */
+/* -------------------------------------------------------------------------- */
+.stats-band.bg1 {
+  background: transparent !important;
+  background-attachment: scroll !important;
+}
+
+/* body 固定背景（全画面テクスチャ） */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: url("../images/haikei3.jpg") center top / cover no-repeat;
+}
+
+/* -------------------------------------------------------------------------- */
+/* [F] モバイル調整                                                           */
+/* -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .stats-badge { font-size: 28px; border-radius: 12px; }
+  .stats-note  { font-size: 15px; }
+}
+
+/* ========================================================================== */
+/* == STATS（導入実績）セクション ここまで ================================== */
+/* ========================================================================== */
+
+
+
+/* ========================================================================== */
+/* == LOGO WALL セクション ここから ========================================== */
+/* ========================================================================== */
+
+/* -------------------------------------------------------------------------- */
+/* [A] コンテナ全体                                                            */
+/* -------------------------------------------------------------------------- */
+.logo-wall {
+  width: min(1240px, 90%);
+  margin: 0 auto;
+  padding: 0;
+  background: transparent;
+  text-align: center;
+}
+.logo-wall h2 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* [B] グリッド型ロゴ一覧（固定レイアウト）                                    */
+/* -------------------------------------------------------------------------- */
+.logo-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(6, 1fr);
+  align-items: center;
+  justify-items: center;
+  filter: grayscale(100%);
+}
+.logo-grid img {
+  max-width: 140px;
+  max-height: 42px;
+  opacity: .9;
+}
+.logo-grid img:hover { opacity: 1; }
+
+@media (max-width: 980px) {
+  .logo-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 520px) {
+  .logo-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* -------------------------------------------------------------------------- */
+/* [C] 無限スクロール型ロゴ（動きのあるタイプ）                               */
+/* -------------------------------------------------------------------------- */
+.logo-track {
+  display: flex;
+  align-items: center;
+  gap: clamp(28px, 3vw, 40px);
+  width: 200%; /* 2倍幅にして無限ループ感を出す */
+  animation: logo-scroll 40s linear infinite;
+}
+.logo-track:hover { animation-play-state: paused; }
+
+.logo-track img {
+  height: 64px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  opacity: .95;
+  margin: 0 clamp(16px, 2.2vw, 32px);
+  transition: transform .15s ease, opacity .2s ease;
+}
+.logo-track img:hover {
+  transform: translateY(-2px);
+  opacity: 1;
+}
+
+@keyframes logo-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@media (max-width: 640px) {
+  .logo-track { gap: 24px; }
+  .logo-track img { height: 44px; margin: 0 14px; }
+}
+
+/* -------------------------------------------------------------------------- */
+/* [D] 白背景の枠で囲うバリエーション                                         */
+/* -------------------------------------------------------------------------- */
+.logo-scroller {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  padding: 24px 8px;
+  overflow: hidden; /* アニメのはみ出しを隠す */
+}
+
+/* ========================================================================== */
+/* == LOGO WALL セクション ここまで ========================================== */
+/* ========================================================================== */
+
+/* ========================================================================== */
+/* == SERVICE: 動画文字マスク =============================================== */
+/* ========================================================================== */
+
+.service-hero{
+  margin: clamp(28px, 6vw, 56px) auto 0;
+}
+.service-svg{
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 4.2;
+  display: block;
+}
+.service-video{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .12);
+}
+
+/* モーション弱者配慮：動画→静止に */
+@media (prefers-reduced-motion: reduce){
+  .service-video{ animation: none; }
+}
+
+/* ========================================================================== */
+/* == SERVICE: 動画文字マスク ここまで ====================================== */
+/* ========================================================================== */
+
+
+
+/* ========================================================================== */
+/* == SERVICE: 背景デコレイヤ / レイアウト ================================== */
+/* ========================================================================== */
+
+/* 2個目ブロックの外側にも広がるように */
+.services-layer{ position: relative; overflow: visible; }
+.services-layer .services-duo{ position: relative; z-index: 1; }
+
+/* デコを「ビューポート幅」で敷く：中央基準で100vwに */
+.services-layer .bg-decor{
+  position: absolute;
+  inset: 0 auto 0 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+}
+
+/* ========================================================================== */
+/* == SERVICE: 2カラムカード ================================================= */
+/* ========================================================================== */
+
+.services-duo{
+  display: grid;
+  gap: 24px;
+  margin: 48px 0;
+}
+@media (min-width: 900px){
+  .services-duo{ grid-template-columns: 1fr 1fr; }
+}
+
+.svc-card{
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, .08);
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(12, 43, 121, .15);
+  overflow: hidden;
+}
+
+.svc-head{
+  background: var(--c-blue, #0f46ff);
+  color: #fff;
+  font-weight: 800;
+  text-align: center;
+  padding: 14px 18px;
+  letter-spacing: .02em;
+  border-bottom: 1px solid rgba(255, 255, 255, .24);
+}
+
+.svc-body{ padding: 18px; }
+
+.svc-thumb{
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin: 6px 0 14px;
+}
+
+.svc-points{ margin: 12px 0 16px 18px; }
+.svc-points li{ margin: 6px 0; }
+
+.svc-actions{ display: flex; gap: 12px; flex-wrap: wrap; }
+
+.btn-outline{
+  background: #fff;
+  color: var(--c-blue, #0f46ff);
+  border: 2px solid var(--c-blue, #0f46ff);
+  border-radius: 999px;
+  padding: 10px 16px;
+  text-decoration: none;
+  display: inline-block;
+}
+
+
+/* ============ サービス紹介セクション ============ */
+.duo {
+  display: grid;
+  gap: 24px;
+  margin: 48px auto;
+}
+@media(min-width:900px){
+  .duo{ grid-template-columns: 1fr 1fr; }
+}
+.duo .card {
+  background:#fff;
+  border:2px solid #2a5bf3;
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 12px 24px rgba(0,0,0,.06);
+}
+.duo .thumb {
+  width:100%;
+  height:auto;
+  border-radius:12px;
+  margin-bottom:16px;
+}
+.duo h2{ font-size:1.5rem; margin:8px 0 12px; }
+.duo p{ margin:0 0 12px; line-height:1.7; }
+.points{ margin:0 0 16px 18px; }
+.points li{ margin:6px 0; }
+.actions{ display:flex; gap:12px; flex-wrap:wrap; }
+.actions .btn {
+  display:inline-block;
+  padding:10px 16px;
+  border-radius:999px;
+  border:1px solid #2a5bf3;
+  text-decoration:none;
+}
+.actions .btn.primary{ background:#2a5bf3; color:#fff; }
+.actions .btn:not(.primary){ color:#2a5bf3; background:#fff; }
+
+/* ========================================================================== */
+/* == SERVICE: ここまで ====================================================== */
+/* ========================================================================== */
+
+
+/* ========================================================================== */
+/* == MEMBER セクション ここから ============================================ */
+/* ========================================================================== */
+
+
+
+/* -------------------------------------------------------------------------- */
+/* [A] ベース（タイトル/リード文/外枠の最初期定義）                         */
+/*  ※ ここは既存の素朴な見た目。後ろの [C][E] でどんどん強化/上書きされます */
+/* -------------------------------------------------------------------------- */
+
+.team{ margin:64px auto; }
+.team-title{ font-size:clamp(20px,2.6vw,36px); font-weight:900; letter-spacing:.06em; margin:0 0 8px; }
+.team-lead{ margin:0 0 20px; color:#58607a; }
+
+/* 横スクロール本体（初期版） */
+.team-carousel{ position:relative; }
+.team-track{
+  display:grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(86%, 360px); /* 1枚の幅 */
+  gap:16px;
+  overflow-x:auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom:14px; /* ドット分の余白 */
+}
+.team-track::-webkit-scrollbar{ display:none; }
+
+.member-card{
+  scroll-snap-align: start;
+  background:#fff;
+  border:1px solid rgba(0,0,0,.06);
+  border-radius:16px;
+  box-shadow:0 10px 28px rgba(0,0,0,.08);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.member-photo{
+  width:100%; height:auto; display:block;
+  aspect-ratio: 16 / 9; object-fit:cover;
+}
+.member-body{ padding:14px 14px 16px; }
+.member-name{ font-size:clamp(16px,1.4vw,20px); margin:0 0 6px; }
+.member-role{ color:#2a5bf3; font-weight:700; margin-left:.5em; font-size:.9em; }
+.member-card p{ margin:0; line-height:1.7; color:#334; }
+
+/* ドット（JSが生成） */
+.team-dots{
+  display:flex; gap:8px; justify-content:center; align-items:center;
+  margin-top:10px;
+}
+.team-dots .dot{
+  width:8px; height:8px; border-radius:50%;
+  background:#c9d1ff; border:0; padding:0; cursor:pointer;
+}
+.team-dots .dot.is-active{ background:#2a5bf3; transform:scale(1.2); }
+
+/* 大きい画面で少し広めに（初期版） */
+@media (min-width: 1024px){
+  .team-track{ grid-auto-columns: min(32%, 420px); }
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* [B] セクション装飾の“土台化”                                              */
+/*  ※ ここから見た目がリッチに。が、[A]を上書きするが挙動はそのままです   */
+/* -------------------------------------------------------------------------- */
+
+.team{
+  position: relative;
+  margin: clamp(48px, 8vw, 96px) auto;
+  overflow: visible;
+}
+
+/* ゴースト見出し（巨大な MEMBER のアウトライン文字を背面） */
+.team::before{
+  content: "MEMBER";
+  position: absolute;
+  inset: auto 0 100%;
+  translate: 0 60px; /* タイトルの上にうっすら */
+  margin-left: clamp(8px, 3vw, 24px);
+  font-weight: 900;
+  font-size: clamp(48px, 12vw, 160px);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(15, 70, 255, .12);
+  pointer-events: none;
+}
+
+/* タイトル＋下線グラデの強化 */
+.team-title{
+  font-size: clamp(22px, 2.8vw, 38px);
+  font-weight: 900;
+  letter-spacing: .06em;
+  margin: 0 0 6px;
+}
+.team-title::after{
+  content:"";
+  display:block;
+  width: clamp(64px, 9vw, 120px);
+  height: 6px;
+  border-radius: 999px;
+  margin-top: 10px;
+  background: linear-gradient(90deg, #0f46ff 0%, #5b86ff 50%, #9fd3ff 100%);
+  box-shadow: 0 4px 18px rgba(42, 91, 243, .35);
+}
+.team-lead{
+  margin: 0 0 22px;
+  color: #5b627a;
+}
+
+/* 横スクロール端フェードの演出（のちに [G] で無効化も可能） */
+.team-carousel{
+  position: relative;
+  isolation: isolate;
+}
+.team-carousel::before,
+.team-carousel::after{
+  content:"";
+  position:absolute;
+  top:0; bottom: 22px; /* ドット分を避ける */
+  width: min(8vw, 56px);
+  z-index: 2;
+  pointer-events: none;
+}
+.team-carousel::before{
+  left:0;
+  background: linear-gradient(90deg, rgba(255,255,255,1), rgba(255,255,255,0));
+}
+.team-carousel::after{
+  right:0;
+  background: linear-gradient(270deg, rgba(255,255,255,1), rgba(255,255,255,0));
+}
+
+/* トラック見栄えの強化（左右余白/マスク/スナップ） */
+.team-track{
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(86%, 360px);
+  gap: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 8px;
+  -webkit-overflow-scrolling: touch;
+  padding: 2px 8px 18px;
+  mask-image: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+}
+@media (min-width: 1024px){
+  .team-track{ grid-auto-columns: min(32%, 420px); }
+}
+.team-track::-webkit-scrollbar{ display: none; }
+
+/* カード見た目の強化（ガラス感＋ホバー） */
+.member-card{
+  scroll-snap-align: start;
+  background: rgba(255,255,255,.78);
+  border: 1px solid rgba(12,43,121,.08);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 18px;
+  box-shadow: 0 14px 36px rgba(9, 30, 66, .10);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+}
+.member-card:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 18px 44px rgba(9, 30, 66, .16);
+  border-color: rgba(15, 70, 255, .18);
+}
+
+/* 画像：比率固定＋ホバーで微ズーム */
+.member-photo{
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+  transition: transform .6s ease;
+}
+.member-card:hover .member-photo{ transform: scale(1.04); }
+
+/* テキスト部（強化） */
+.member-body{ padding: 14px 16px 16px; }
+.member-name{
+  display:flex; align-items:baseline; gap:.5rem;
+  font-size: clamp(16px, 1.5vw, 20px);
+  margin: 0 0 8px;
+}
+.member-role{
+  font-weight:700; font-size:.85em;
+  color:#1546ff;
+  background: rgba(21,70,255,.08);
+  border: 1px solid rgba(21,70,255,.18);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.member-card p{
+  margin: 0;
+  line-height: 1.7;
+  color: #2d3445;
+}
+
+/* ドット見栄えの強化 */
+.team-dots{
+  display:flex; gap:10px; justify-content:center; align-items:center;
+  margin-top: 6px;
+}
+.team-dots .dot{
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #cdd6ff;
+  border: 0; padding: 0; cursor: pointer;
+  transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+}
+.team-dots .dot.is-active{
+  background:#2a5bf3;
+  box-shadow: 0 0 0 6px rgba(42,91,243,.12);
+  transform: scale(1.2);
+}
+
+/* 飾りブロブ（ほんのり動く） */
+.team::after{
+  content:"";
+  position:absolute;
+  right: -6vw; top: -4vw;
+  width: clamp(120px, 20vw, 320px);
+  height: clamp(120px, 20vw, 320px);
+  background:
+    radial-gradient(60% 60% at 30% 30%, rgba(159,211,255,.9), transparent 70%),
+    radial-gradient(50% 50% at 70% 70%, rgba(21,70,255,.25), transparent 60%),
+    radial-gradient(40% 40% at 20% 80%, rgba(21,70,255,.12), transparent 60%);
+  filter: blur(8px);
+  border-radius: 50%;
+  animation: floatY 9s ease-in-out infinite alternate;
+  pointer-events:none;
+  z-index: -1;
+}
+@keyframes floatY{
+  from{ transform: translateY(-6px) }
+  to{   transform: translateY( 6px) }
+}
+
+/* 動きを減らしたいユーザー向けの配慮 */
+@media (prefers-reduced-motion: reduce){
+  .member-card:hover{ transform:none; }
+  .member-photo{ transition: none; }
+  .team::after{ animation: none; }
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* [C] 値の再提示（同じ指定を再掲）                                          */
+/*  ※ 後方にあることでこの値が最終採用される“保険”用途。変更は一切なし。   */
+/* -------------------------------------------------------------------------- */
+
+.team-track{ grid-auto-columns: min(86%, 360px); }
+@media (min-width: 1024px){
+  .team-track{ grid-auto-columns: min(32%, 420px); }
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* [D] フェード演出の無効化（プロジェクト事情で不要なときに強制OFF）        */
+/*  ※ 直上のフェード/マスク演出を !important で打ち消します。              */
+/* -------------------------------------------------------------------------- */
+
+.team-carousel::before,
+.team-carousel::after { content: none !important; }
+
+.team-track{
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+}
+
+
+
+/* ========================================================================== */
+/* == MEMBER セクション ここまで ============================================ */
+/* ========================================================================== */
+
+
+/* =========================================================
+   Access セクション（重複削除＋コメント整備のみ／挙動不変）
+   ※ 下の定義ほど優先（元コードの最終値を残す）
+   ========================================================= */
+
+/* --- 変数：左右共通の高さ -------------------------------- */
+:root{
+  --access-h: clamp(520px, 62vh, 680px);
+}
+
+/* --- 背景（パララックス） -------------------------------- */
+.bg3{
+  background-image: url("../images/haikei3.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* --- セクション外枠 -------------------------------------- */
+.access{ position:relative; background:#fff; padding-block: clamp(48px, 6vw, 96px); }
+.access--wide{ padding:0; } /* 余白はグリッド側で持つ */
+
+/* --- レイアウト（最終値を採用） -------------------------- */
+.access-grid{
+  display:grid;
+  grid-template-columns: min(540px, 40%) 1fr; /* 左固定/右可変（最終） */
+  gap: clamp(24px, 3vw, 40px);
+  align-items: stretch;                      /* 高さそろえ */
+  min-height: var(--access-h);
+}
+
+/* --- 左カード（リッチ） ---------------------------------- */
+.access-left{
+  min-height: var(--access-h);
+  display:flex; flex-direction:column; justify-content:flex-start; gap:16px;
+  background: linear-gradient(165deg, rgba(20,75,255,.92), rgba(20,75,255,.97));
+  color:#fff;
+  border-radius:24px;
+  box-shadow: 0 24px 60px rgba(0,0,0,.25);
+  border:1px solid rgba(255,255,255,.12);
+  padding: clamp(24px, 3.5vw, 40px);
+  backdrop-filter: saturate(120%) blur(2px);
+}
+.access-left h2{
+  font-weight:800;
+  font-size: clamp(28px, 2.5vw, 36px);
+  letter-spacing:.05em;
+  margin:0 0 20px;
+}
+.access-left a{ color:#fff; text-decoration:underline; }
+
+/* --- 見出し“アクセス”のデザイン --------------------------- */
+.access-title{ position:relative; margin:0 0 22px; padding-left:56px; }
+.access-title .jp{
+  display:block; font-weight:800; font-size:clamp(28px, 2.6vw, 38px); letter-spacing:.06em;
+}
+.access-title .en{
+  display:block; font-size:12px; font-weight:800; letter-spacing:.28em; opacity:.75; margin-top:2px;
+}
+.access-title::after{
+  content:""; position:absolute; left:56px; bottom:-8px; width:140px; height:6px;
+  background: linear-gradient(90deg,#ffffff 0%, rgba(255,255,255,.0) 100%); border-radius:999px;
+}
+.access-title::before{
+  content:""; position:absolute; left:16px; top:2px; width:28px; height:28px;
+  border-radius:50% 50% 50% 0; transform: rotate(-45deg);
+  background: radial-gradient(circle at 45% 45%, #fff 0 6px, transparent 7px) #00d2ff;
+  box-shadow: 0 6px 14px rgba(0,0,0,.25);
+}
+
+/* --- 情報リスト（2カラム） -------------------------------- */
+.access-list{
+  display:grid;
+  grid-template-columns: 6.5ch 1fr;
+  gap:14px 18px;
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height:1.9;
+  margin:8px 0 0;
+}
+.access-list dt{ font-weight:700; opacity:.9; position:relative; }
+.access-list dt::after{
+  content:""; position:absolute; right:-10px; top:.35em; bottom:.35em;
+  width:1px; background: rgba(255,255,255,.22);
+}
+.access-list dd{ margin:0; }
+
+/* --- ルート案内ボタン ------------------------------------ */
+.access-btn{
+  display:inline-block; margin-top:12px; padding:10px 18px;
+  border-radius:999px; background:#fff; color:#0f46ff; font-weight:700;
+  text-decoration:none; box-shadow:0 8px 24px rgba(0,0,0,.2);
+  transform: translateZ(0);
+}
+.access-btn:hover{ background:#f2f6ff; }
+.access-btn:active{ transform: translateY(1px); }
+
+/* --- 右：地図（最終値） ---------------------------------- */
+.access-map{ position:relative; display:flex; padding:0; }
+.access-map iframe{
+  width:100%; height: var(--access-h);  /* 左と同じ高さに固定（最終） */
+  border:0; border-radius:22px; box-shadow:0 22px 60px rgba(0,0,0,.28);
+  pointer-events:auto;
+}
+
+/* --- 右寄せラッパ（既存互換） ----------------------------- */
+.access .map-wrap{ width:100%; max-width:900px; margin-left:auto; margin-right:0; }
+.access .map-wrap iframe{
+  width:100%; height:500px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.2);
+}
+
+
+/* === Access：上から元の背景を少し先行表示＆余白で息させる === */
+/* 1) セクション背景を透過（元の背景を先に見せる） */
+.access { background: transparent; }
+
+/* 2) 上側に余白を足して詰まりを解消（数値は好みで微調整） */
+.access { padding-top: clamp(72px, 8vw, 120px); }
+
+/* 3) それでも境界が硬い場合は、柔らかいトップフェードを重ねる（任意） */
+.access::before{
+  content:"";
+  position:absolute; inset:0 0 auto 0; height:80px;
+  pointer-events:none;
+  /* 上=透明 → 下=ほぼ透明の白。元背景の上に“空気層”を作るだけ */
+  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,.08));
+}
+
+/* === Access：左右ガター＆中央寄せ（横の詰まり解消） ================== */
+/* 1) セクション左右にガターを追加（右端の地図がベタ付きを回避） */
+.access{
+  padding-inline: clamp(16px, 4vw, 48px);
+}
+
+/* 2) グリッド自体に最大幅を設定し、中央に寄せる（大画面での端ベタ回避） */
+.access-grid{
+  max-width: min(1200px, 92vw); /* 1200pxを上限に、画面の8%を余白に */
+  margin-inline: auto;
+}
+
+/* 3) 左カードの内側余白をデスクトップだけ少し増やして“みちみち”を緩和 */
+@media (min-width: 1024px){
+  .access-left{
+    padding: clamp(28px, 3.8vw, 52px);
+  }
+}
+
+/* 4) さらに余白感を出したい時のオプション（好みでON）
+.access-map{ margin-right: clamp(8px, 2vw, 20px); }
+*/
+
+
+/* --- ワイド画面の比率（元コードの挙動を保持） ------------- */
+@media (min-width: 1200px){
+  .access-map iframe{ aspect-ratio: 21/9; } /* 高さは後段の最終指定で上書き */
+}
+
+/* --- モバイル：縦積み＆高さ調整 --------------------------- */
+@media (max-width: 840px){
+  .access-grid{ grid-template-columns:1fr; }
+  .access-left{ order:2; min-height:auto; }
+  .access-map{ order:1; }
+  .access-map iframe{ height: clamp(300px, 45vh, 460px); }
+  .access-list{ grid-template-columns:1fr; } /* ラベル上/値下 */
+}
+
+
+
+
+
+
+/* === Mobile Nav === */
+@media (max-width:980px){
+  .global-nav{position:fixed; inset:0; display:none; background:rgba(15,70,255,.96);
+    padding:96px 24px 24px; flex-direction:column; gap:16px; z-index:1200}
+  .global-nav.is-open{display:flex}
+  .global-nav a{font-size:18px}
+  .nav-toggle{position:fixed; right:12px; top:12px; z-index:1300; font-size:28px}
+}
+body.no-scroll{overflow:hidden}
+
+/* === iOSで固定背景オフ（パララックスはJS側で十分） === */
+@media (max-width:1024px){
+  .bg-section{background-attachment:scroll}
+  body::before{position:absolute}
+}
+
+/* === Hero上部余白（固定ロゴ＋ノッチに備える） === */
+@media (max-width:640px){
+  .hero{padding-top:calc(72px + env(safe-area-inset-top))}
+}
+
+/* === 画像のはみ出し保険 === */
+@media (max-width:900px){
+  .hero-image img{width:100%; max-width:100%; height:auto; transform:none; box-shadow:0 12px 28px rgba(0,0,0,.25)}
+}
+
+/* モバイルだけ brand直後の画像を表示、PCは従来の右側画像を使用 */
+.hero-image--mobile{display:none;}
+@media (max-width:900px){
+  .hero-image{display:none;}              /* 右側の画像は隠す */
+  .hero-image--mobile{display:block; margin:16px 0 24px;}
+  .hero-image--mobile img{width:100%; height:auto; display:block;}
+}
+
+/* === Hero 見出し：スマホで必ず2行に収める === */
+.main-title .line{display:block;}                  /* 1行ずつ */
+@media (max-width:640px){
+  .main-title{ font-size:clamp(26px, 7.2vw, 40px); /* 小さめに可変 */
+               line-height:1.12; margin:8px 0; }
+  .main-title .line2.nowrap{ white-space:nowrap; } /* 2行目は折り返さない */
+}
+/* タブレット帯も少し抑える（任意） */
+@media (641px <= width <= 900px){
+  .main-title{ font-size:clamp(34px, 5.6vw, 56px); line-height:1.12; }
+}
+
+/* === Hero 見出し：スマホでは必ず2行に収める === */
+@media (max-width:900px){
+  .hero .main-title{
+    font-size: clamp(24px, 6.8vw, 38px) !important; /* 強制で小さく */
+    line-height: 1.12;
+    margin: 8px 0 10px;
+    word-break: normal;          /* 変な分割を防ぐ */
+  }
+  .hero .main-title .line{ display:block; } /* 1行ずつ */
+  .hero .main-title .line2{ white-space: nowrap; } /* 2行目は1行に */
+}
+
+/* MEMBERゴーストを少し上へ（モバイル） */
+@media (max-width:900px){
+  .team::before{
+    translate: 0 30px;  /* 既存は 60px。数値を小さくすると上に寄る */
+  }
+}
+
+/* デコが次セクションに被らないように */
+.bg-section.has-decor{
+  overflow: clip;
+}
+@supports not (overflow: clip){
+  .bg-section.has-decor{ overflow: hidden; } /* 互換用 */
+}
+
+/* 念のため：実績帯は常に前面に */
+.stats-band{ position: relative; z-index: 5; }
+
+@media (max-width: 840px){
+  .access-grid{ grid-template-columns:1fr; }
+  .access-left{ order:1; min-height:auto; } /* ★2→1 に変更：テキスト先 */
+  .access-map{ order:2; }                   /* ★1→2 に変更：地図あと */
+  .access-map iframe{ height: clamp(300px, 45vh, 460px); }
+  .access-list{ grid-template-columns:1fr; }
+}

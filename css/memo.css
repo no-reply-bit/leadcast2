@@ -1,0 +1,224 @@
+
+
+
+/* ============ Background Sections ============ */
+.bg-section{
+  position:relative; min-height:100vh;
+  background-size:cover; background-position:center top; background-repeat:no-repeat;
+  background-attachment:fixed; display:flex; align-items:center; justify-content:center;
+}
+.bg1{ background-image:url("../images/haikei3.jpg"); }
+.bg2{ background-image:url("../images/haikei2.jpg"); }
+.bg3{ background-image:url("../images/haikei3.jpg"); }
+
+.bg-overlay{
+  background:rgba(255,255,255,.6); padding:40px; border-radius:12px;
+}
+
+/* ロゴだけのセクション（全画面でない） */
+.bg-section.logos{ min-height:auto; padding:56px 0 72px; justify-content:center; }
+
+
+:root{
+  --c-blue:#0f46ff; --c-blue-d:#0d34c9; --c-yellow:#f2bd11; --c-text:#0a0a0a;
+  --max:1200px;
+}
+.container{max-width:var(--max); margin-inline:auto; padding-inline:16px;}
+/* Header（簡略） */
+.site-header{position:fixed; inset-block-start:0; inset-inline:0; height:64px;
+  display:flex; align-items:center; justify-content:space-between; padding:0 16px; z-index:50;
+  background:transparent; color:#fff;}
+.site-header .logo{font-weight:800; letter-spacing:.3px; color:#fff;}
+.global-nav a{color:#fff; margin-inline:12px; font-weight:600; opacity:.95}
+.global-nav .btn-outline{padding:8px 14px; border:2px solid #fff; border-radius:24px}
+.nav-toggle{display:none}
+
+
+
+/* 背景の上に新しいデコ層を挟む */
+.bg-section { position: relative; }
+.bg-decor{
+  position: absolute; inset: 0;
+  z-index: 1;                 /* 背景より上 */
+  pointer-events: none;       /* クリック無効 */
+}
+/* 本文はデコ層より上 */
+.bg-section > :not(.bg-decor){ position: relative; z-index: 2; }
+
+/* 個別パーツの見た目・初期位置 */
+.decor{ position: absolute; will-change: transform; transform: translate3d(0,0,0); }
+
+/* 左下の木（cactus） */
+.decor-cactus{
+  left: clamp(-40px, -4vw, -12px);
+  bottom: clamp(-20px, -4vh, -8px);
+  width: clamp(160px, 22vw, 360px);
+  opacity: .95;
+}
+
+/* 右上の雲（cloud） */
+.decor-cloud{
+  right: clamp(-60px, -6vw, -16px);
+  top: clamp(12px, 2vh, 32px);
+  width: clamp(220px, 28vw, 520px);
+  opacity: .92;
+}
+
+/* スクロール量に応じた移動量（10%）をCSS変数で反映 */
+.has-decor{
+  --decor-shift: 0px;  /* JSで更新 */
+}
+/* サボテンの縦位置を上げる（上書き） */
+.has-decor .decor-cactus{
+  bottom: clamp(50px, 12vh, 150px); /* ←ここで高さ調整。数値を上げるほど上へ */
+  transform: translate3d(0, var(--decor-shift), 0);
+}
+.has-decor .decor-cloud{
+  transform: translate3d(0, var(--decor-shift), 0);
+}
+
+/* タブレット以下は少し控えめに */
+@media (max-width: 1024px){
+  .decor-cactus{ width: clamp(140px, 28vw, 280px); left: -4vw; }
+  .decor-cloud { width: clamp(180px, 36vw, 420px); right: -5vw; }
+}
+
+/* ── すこし強めに見せる調整（控えめパララックスのまま） ── */
+.has-decor{
+  --cloud-alpha: .55;     /* 0.32 → 0.55 に上げて雲を見せる */
+  --cactus-alpha: .48;    /* 0.28 → 0.48 に上げてサボテンも見せる */
+  --decor-sat: .75;       /* 彩度を少し戻す（0.55 → 0.75） */
+  --decor-bright: 1.05;   /* 明るさは控えめ */
+  --decor-contrast: 1.0;  /* コントラストは等倍に */
+  --decor-blur: .3px;     /* ぼかしを弱める（0.6px → 0.3px） */
+}
+
+/* blend-mode は使わず通常合成でくっきり（入れてた場合は外す） */
+.decor-cloud,
+.decor-cactus{
+  mix-blend-mode: normal;
+}
+
+/* 各パーツのフィルタはこのまま（変数だけ効きが変わります） */
+.decor-cloud{
+  opacity: var(--cloud-alpha);
+  filter: saturate(var(--decor-sat))
+          brightness(var(--decor-bright))
+          contrast(var(--decor-contrast))
+          blur(var(--decor-blur));
+}
+.decor-cactus{
+  opacity: var(--cactus-alpha);
+  filter: saturate(var(--decor-sat))
+          brightness(var(--decor-bright))
+          contrast(var(--decor-contrast))
+          blur(var(--decor-blur));
+}
+
+/* 追従量の変数を2本用意（初期値） */
+.has-decor{ --shift-cactus: 0px; --shift-cloud: 0px; }
+
+/* 既存の .decor の transform 定義があれば削除/上書き */
+.decor{
+  position:absolute; will-change: transform;
+  --tx: 0px; --ty: 0px; /* 位置微調整用（任意） */
+}
+
+/* サボテンと雲で別々の shift を使う（パララックス＋位置微調整を合成） */
+.decor-cactus{ transform: translate3d(var(--tx), calc(var(--ty) + var(--shift-cactus)), 0); }
+.decor-cloud { transform: translate3d(var(--tx), calc(var(--ty) + var(--shift-cloud)),  0); }
+
+/* 追加の雲の個別配置 */
+.has-decor .decor-cloud:nth-of-type(2){  /* cloud2：右下 */
+  left: auto; top: auto;                 /* 位置の衝突を避ける */
+  right: clamp(60px, 10vw, 270px);
+  bottom: clamp(60px, 12vh, 250px);
+  width: clamp(220px, 28vw, 520px);
+  opacity: .92;
+  /* さらに右下に寄せたい時は ↑ の right/bottom を大きめに */
+}
+
+.has-decor .decor-cloud:nth-of-type(3){  /* cloud3：お好みで微調整 */
+  right: clamp(160px, 14vw, 320px);
+  top: clamp(40px, 6vh, 140px);
+  width: clamp(200px, 26vw, 460px);
+  opacity: .88;
+}
+
+/* ===== セクション全体をふわっと登場 ===== */
+.fade-section {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+  will-change: opacity, transform;
+}
+
+.fade-section.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+
+
+/* lvl2 背景デコ配置 */
+.decor-lvl2 {
+  position: absolute;
+  will-change: transform;
+  opacity: .9;
+}
+
+.decor-lvl2:nth-child(1) {
+  top: 8%; left: 6%;
+  width: clamp(120px, 18vw, 260px);
+}
+.decor-lvl2:nth-child(2) {
+  bottom: 12%; right: 8%;
+  width: clamp(140px, 20vw, 300px);
+}
+.decor-lvl2:nth-child(3) {
+  top: 22%; right: 20%;
+  width: clamp(100px, 15vw, 220px);
+}
+
+/* スクロール連動（既存の .has-decor と同様に JS が動かす） */
+.has-decor .decor-lvl2 {
+  transform: translate3d(0, var(--decor-shift), 0);
+}
+
+
+/* ===== “外側にちりばめる”レイアウト ===== */
+.decor-lvl2{
+  position:absolute;
+  will-change:transform;
+  opacity:.9;
+  filter:drop-shadow(0 6px 18px rgba(0,0,0,.12));
+  transform:translate3d(0, var(--decor-shift,0px), 0); /* パララックス継承 */
+}
+
+/* 左上：少しはみ出す（マイナスvwで外へ） */
+.decor-lvl2-a{
+  top:-2vw; left:-6vw;
+  width:clamp(140px, 20vw, 320px);
+  rotate:-4deg;
+}
+
+/* 右下：大きめ＋外へ */
+.decor-lvl2-b{
+  right:-8vw; bottom:-4vw;
+  width:clamp(160px, 24vw, 380px);
+  rotate:3deg;
+}
+
+/* 右上：やや内側に浮かせてバランス取り */
+.decor-lvl2-c{
+  top:-3vw; right:18vw;
+  width:clamp(120px, 18vw, 280px);
+  rotate:-2deg;
+}
+
+/* スマホは収まり重視で控えめに（外ハミ出し量を減らす） */
+@media(max-width: 768px){
+  .decor-lvl2-a{ top:-1vw; left:-2vw; width:clamp(120px, 34vw, 240px); }
+  .decor-lvl2-b{ right:-3vw; bottom:-2vw; width:clamp(140px, 36vw, 300px); }
+  .decor-lvl2-c{ top:2vw; right:6vw; width:clamp(110px, 28vw, 220px); }
+}
