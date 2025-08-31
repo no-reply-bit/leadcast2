@@ -1684,29 +1684,7 @@ body.no-scroll{overflow:hidden}
   }
 }
 
-/* === SERVICE 見出し：SPは動画マスクをやめて青文字に === */
-@media (max-width: 900px){
-  /* 1) タイトル用の動画/マスクを隠す（ありそうな要素名を一網打尽） */
-  .service .title-video,
-  .service .video-bg,
-  .service .video-mask,
-  .service .title-bg video{ display:none !important; }
 
-  /* 2) 文字をプレーンな青に（background-clip:text 等を打ち消し） */
-  .service .section-title,
-  .service .section-title.en,
-  .service .service-title,
-  .service h2.section-title{
-    background:none !important;
-    -webkit-background-clip:initial !important;
-    background-clip:initial !important;
-    -webkit-text-fill-color: var(--brand-blue, #0F46FF) !important;
-    color: var(--brand-blue, #0F46FF) !important;
-    mix-blend-mode: normal !important;
-    filter:none !important;
-    text-shadow:none !important;
-  }
-}
 
 
 /* モバイルナビの表示切替をこれで統一 */
@@ -1746,5 +1724,52 @@ body.no-scroll{ overflow:hidden; }
     padding: 6px 12px;
     font-size: .9rem;
     min-height: 38px;
+  }
+}
+
+
+/* === SERVICE 見出し：SPは動画マスクをやめて青文字に === */
+@media (max-width: 900px){
+  /* 1) タイトル用の動画/マスクを隠す（ありそうな要素名を一網打尽） */
+  .service .title-video,
+  .service .video-bg,
+  .service .video-mask,
+  .service .title-bg video{ display:none !important; }
+
+  /* 2) 文字をプレーンな青に（background-clip:text 等を打ち消し） */
+  .service .section-title,
+  .service .section-title.en,
+  .service .service-title,
+  .service h2.section-title{
+    background:none !important;
+    -webkit-background-clip:initial !important;
+    background-clip:initial !important;
+    -webkit-text-fill-color: var(--brand-blue, #0F46FF) !important;
+    color: var(--brand-blue, #0F46FF) !important;
+    mix-blend-mode: normal !important;
+    filter:none !important;
+    text-shadow:none !important;
+  }
+}
+
+/* SERVICE 見出し：SPは動画マスクOFF → 青文字に */
+@media (max-width: 900px){
+  .service-hero{                 /* 見出しの箱をテキスト用に */
+    position: relative;
+    min-height: 120px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .service-hero .service-svg{    /* SVGごと隠す＝動画も見えなくなる */
+    display: none !important;
+  }
+  /* SVGの代わりにテキストを描く（HTMLはそのまま） */
+  .service-hero::after{
+    content: "SERVICE";
+    color: var(--brand-blue, #0F46FF);
+    font-weight: 800;
+    letter-spacing: .08em;
+    font-family: var(--jp-sans, "Noto Sans JP", system-ui, sans-serif);
+    font-size: clamp(28px, 18vw, 72px);
+    line-height: 1;
   }
 }

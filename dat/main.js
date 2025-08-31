@@ -496,3 +496,23 @@ window.addEventListener('orientationchange', applyParallaxScale);
   if (document.readyState === 'complete') init();
   else window.addEventListener('load', init);
 })();
+
+
+// === SERVICE動画：SPでは読み込みを止めて省電力 ===
+(() => {
+  const mq = window.matchMedia('(max-width: 900px)');
+  function maybeDisableServiceVideo(){
+    const v = document.querySelector('.service-video');
+    if (!v) return;
+    if (mq.matches){
+      try{
+        v.pause();
+        v.removeAttribute('src'); // 読み込みを解除
+        v.load();                 // 反映
+      }catch(_){}
+    }
+  }
+  maybeDisableServiceVideo();
+  (mq.addEventListener ? mq.addEventListener('change', maybeDisableServiceVideo)
+                       : mq.addListener && mq.addListener(maybeDisableServiceVideo));
+})();
