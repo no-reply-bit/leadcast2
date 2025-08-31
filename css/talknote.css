@@ -1753,23 +1753,20 @@ body.no-scroll{ overflow:hidden; }
 }
 
 /* SERVICE 見出し：SPは動画マスクOFF → 青文字に */
+/* SERVICE 見出し：SPは動画マスクOFF → 青文字だけ表示 */
 @media (max-width: 900px){
-  .service-hero{                 /* 見出しの箱をテキスト用に */
-    position: relative;
-    min-height: 120px;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .service-hero .service-svg{    /* SVGごと隠す＝動画も見えなくなる */
-    display: none !important;
-  }
-  /* SVGの代わりにテキストを描く（HTMLはそのまま） */
+  .service-hero{ position:relative; min-height:120px;
+                 display:flex; align-items:center; justify-content:center; }
+  /* SVGもvideoも徹底的に非表示 */
+  .service-hero .service-svg,
+  .service-hero foreignObject,
+  .service-hero video{ display:none !important; }
+
+  /* 代替テキスト */
   .service-hero::after{
-    content: "SERVICE";
+    content:"SERVICE";
     color: var(--brand-blue, #0F46FF);
-    font-weight: 800;
-    letter-spacing: .08em;
-    font-family: var(--jp-sans, "Noto Sans JP", system-ui, sans-serif);
-    font-size: clamp(28px, 18vw, 72px);
-    line-height: 1;
+    font: 800 clamp(28px, 18vw, 72px)/1 var(--jp-sans, "Noto Sans JP", system-ui, sans-serif);
+    letter-spacing:.08em;
   }
 }

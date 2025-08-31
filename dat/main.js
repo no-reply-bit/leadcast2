@@ -498,21 +498,35 @@ window.addEventListener('orientationchange', applyParallaxScale);
 })();
 
 
-// === SERVICE動画：SPでは読み込みを止めて省電力 ===
+
+
+// === SERVICE動画：SPでは読み込み自体を止める ===
 (() => {
   const mq = window.matchMedia('(max-width: 900px)');
-  function maybeDisableServiceVideo(){
-    const v = document.querySelector('.service-video');
-    if (!v) return;
-    if (mq.matches){
-      try{
+
+  function killServiceVideo() {
+    if (!mq.matches) return;
+    const svg = document.querySelector('.service-hero .service-svg');
+    const v   = document.querySelector('.service-hero video');
+
+    if (v) {
+      try {
         v.pause();
-        v.removeAttribute('src'); // 読み込みを解除
-        v.load();                 // 反映
-      }catch(_){}
+        v.removeAttribute('src'); // 参照解除
+        v.load();                 // ネットワーク停止
+      } catch (_) {}
     }
+    if (svg) svg.style.display = 'none'; // 念のため
   }
-  maybeDisableServiceVideo();
-  (mq.addEventListener ? mq.addEventListener('change', maybeDisableServiceVideo)
-                       : mq.addListener && mq.addListener(maybeDisableServiceVideo));
+
+  // DOM構築後に必ず実行（早すぎて要素未発見→無効、を防ぐ）
+  document.addEventListener('DOMContentLoaded', killServiceVideo);
+
+  // 直接実行（遷移直後や復帰時用）
+  killServiceVideo();
+
+  // 画面幅や向きが変わったら再判定
+  (mq.addEventListener ? mq.addEventListener('change', e => e.matches && killServiceVideo())
+                       : mq.addListener && mq.addListener(e => e.matches && killServiceVideo()));
+  window.addEventListener('orientationchange', killServiceVideo);
 })();
