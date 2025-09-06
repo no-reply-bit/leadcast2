@@ -1,0 +1,102 @@
+/* ======================================================
+   privacy.css — プライバシーポリシー専用
+   ・talknote.css の共通ヘッダーを利用（独自定義なし）
+   ・青背景/白文字
+   ・本文はヘッダーより下から開始
+   ====================================================== */
+:root{
+  --bg-blue: #0d43ff;
+  --text-white: #ffffff;
+  --muted: rgba(255,255,255,.82);
+  --thin: rgba(255,255,255,.18);
+}
+
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--bg-blue);
+  color:var(--text-white);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+/* コンテナ（本文エリア） */
+.container.policy-single{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: clamp(24px,5vw,48px) 20px;
+  padding-top: clamp(56px, 12vh, 140px); /* ヘッダーの下から本文開始 */
+}
+
+/* タイトル & リード */
+.page-title{
+  margin:0 0 10px;
+  font-weight:800;
+  font-size:clamp(32px,7vw,86px); /* 大きめだが1行保持 */
+  line-height:1.05;
+  letter-spacing:.04em;
+  white-space:nowrap;
+  word-break:keep-all;
+  overflow-wrap:normal;
+}
+.lead{
+  color:var(--muted);
+  font-size:clamp(16px,1.9vw,18px);
+  line-height:1.9;
+  margin:6px 0 22px;
+}
+
+/* セクション */
+h2{
+  margin:28px 0 12px;
+  font-size:clamp(20px,2.6vw,26px);
+  line-height:1.35;
+}
+p{ margin:0 0 14px; color:var(--muted); }
+ul{ padding-left:1.2em; margin:.2em 0 1.1em; }
+li+li{ margin-top:.25em; }
+
+/* 表風の定義リスト */
+.table-like{
+  display:grid;
+  grid-template-columns: 200px 1fr;
+  gap:10px 16px;
+  padding:14px 16px;
+  border:1px solid var(--thin);
+  border-radius:12px;
+  background:rgba(255,255,255,.05);
+}
+.table-like dt{ color:var(--muted); font-weight:600; }
+.table-like dd{ margin:0; color:var(--text-white); }
+
+/* 備考 */
+.note{ color:var(--muted); margin-top:18px; font-size:14px; }
+
+/* モバイル最適化 */
+@media (max-width: 720px){
+  .page-title{ font-size: clamp(28px, 7vw, 48px); }
+  .table-like{ grid-template-columns: 1fr; }
+}
+/* privacyページでは右上ボタンを常時表示＆右上固定 */
+.btn-contact-float{
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 2000;
+  opacity: 1 !important;
+  transform: none !important;
+  pointer-events: auto !important;
+}
+
+/* ==== PC表示で強制的に右上固定 ==== */
+@media (min-width: 901px) {
+  .btn-contact-float {
+    position: fixed !important;
+    top: 16px !important;
+    right: 16px !important;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    z-index: 3000 !important;   /* ヘッダーや他要素より前面に */
+  }
+}

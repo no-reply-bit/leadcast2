@@ -1,49 +1,161 @@
 <!doctype html>
-<html lang="ja">
+<html lang="ja" itemscope itemtype="https://schema.org/CollectionPage">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ニュース | LEAD CAST</title>
   <meta name="description" content="LEAD CASTの最新ニュース・お知らせ一覧。パイロット企画募集やイベント開催情報などを発信します。">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/news.css">
+  <link rel="alternate" type="application/rss+xml" title="LEAD CAST ニュースRSS" href="/feed.xml">
 </head>
 <body>
   <a class="skip" href="#main">本文へ移動</a>
 
   <header class="site-header" role="banner">
-    <a class="logo" href="index.html">LEAD CAST</a>
-    <nav class="global-nav" aria-label="グローバルナビゲーション">
+    <div class="header-inner">
+      <a class="logo" href="index.html" aria-label="LEAD CAST ホーム">LEAD CAST</a>
+    <nav class="global-nav" id="gnav" aria-label="グローバルナビゲーション">
       <a href="company.html">会社情報</a>
-      <a href="services.html">サービス</a> <!-- 追加 -->
-      <a href="sponsors.html">スポンサーの皆さまへ</a>
-      <a href="privacy.html">プライバシーポリシー</a>
-      <a href="tokushoho.html">特定商取引法に基づく表記</a>
-      <a aria-current="page" href="news.html">ニュース</a>
+      <a href="#about">About Us</a>
+      <a href="#service">サービス</a>
+      <a href="news.html">ニュース</a>
+      <a href="privacy.html">ポリシー/基本方針</a>
+      <a href="privacy.html">資料請求</a>
       <a href="contact.html" class="btn-primary">お問い合わせ</a>
-    </nav>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-label="メニューを開く">☰</button>
+      </nav>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-label="メニューを開く">☰</button>
+    </div>
   </header>
 
-  <main id="main" class="container">
-    <h1>ニュース</h1>
-    <p>LEAD CASTの最新のお知らせを掲載しています。</p>
 
-    <ul class="news-list">
-      <li>
-        <time datetime="2025-08-28">2025/08/28</time>
-        <a href="#">パイロットスポンサー募集を開始しました</a>
-      </li>
-      <li>
-        <time datetime="2025-07-15">2025/07/15</time>
-        <a href="#">サービス設計ブループリントを公開しました</a>
-      </li>
-      <li>
-        <time datetime="2025-06-30">2025/06/30</time>
-        <a href="#">リードキャスティング型プラットフォーム企画を発表</a>
-      </li>
-    </ul>
 
-    <p class="note">※ 詳細記事ページは順次公開予定です。</p>
+
+
+  <nav class="breadcrumb" aria-label="パンくずリスト">
+    <ol>
+      <li><a href="index.html">ホーム</a></li>
+      <li aria-current="page">ニュース</li>
+    </ol>
+  </nav>
+
+  <main id="main" class="container" itemprop="mainEntity">
+    <section class="page-hero">
+      <h1 class="title">ニュース</h1>
+      <p class="lead">LEAD CASTの最新のお知らせやプレスリリース、イベント情報をお届けします。</p>
+      <div class="controls" role="search">
+        <form class="search-form" id="newsSearchForm">
+          <label for="q" class="sr-only">ニュースを検索</label>
+          <input id="q" name="q" type="search" placeholder="キーワードで検索…" autocomplete="off">
+          <button type="submit" class="btn">検索</button>
+          <button type="reset" class="btn btn-ghost" id="clearSearch">クリア</button>
+        </form>
+        <div class="filters" aria-label="フィルタ">
+          <div class="filter-group">
+            <span class="filter-label">カテゴリ</span>
+            <button class="chip" data-tag="all" aria-pressed="true">すべて</button>
+            <button class="chip" data-tag="お知らせ">お知らせ</button>
+            <button class="chip" data-tag="リリース">リリース</button>
+            <button class="chip" data-tag="イベント">イベント</button>
+            <button class="chip" data-tag="採用">採用</button>
+          </div>
+          <div class="filter-group">
+            <label for="sort">並び替え</label>
+            <select id="sort" name="sort">
+              <option value="newest" selected>新しい順</option>
+              <option value="oldest">古い順</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+<section class="news-grid" aria-live="polite">
+  <!-- 1 -->
+  <article class="card" itemscope itemtype="https://schema.org/NewsArticle" data-tags="お知らせ">
+    <a class="card-link" href="#" aria-label="パイロットスポンサー募集を開始しましたの詳細ページ" itemprop="mainEntityOfPage url">
+      <figure class="thumb" aria-hidden="true">
+        <img
+          src="./images/news1.png"
+          alt="パイロットスポンサー募集を開始しました"
+          loading="lazy"
+          decoding="async"
+          width="640" height="360"
+          itemprop="image">
+      </figure>
+      <div class="meta">
+        <time datetime="2025-08-28" itemprop="datePublished">2025/08/28</time>
+        <span class="tag">お知らせ</span>
+      </div>
+      <h2 class="card-title" itemprop="headline">パイロットスポンサー募集を開始しました</h2>
+      <p class="card-excerpt" itemprop="description">
+        BtoBウェビナー×リード提供モデルのパイロットスポンサーを期間限定で募集します。特典・要件の詳細をご確認ください。
+      </p>
+    </a>
+  </article>
+
+  <!-- 2 -->
+  <article class="card" itemscope itemtype="https://schema.org/NewsArticle" data-tags="リリース">
+    <a class="card-link" href="#" aria-label="サービス設計ブループリントを公開しましたの詳細ページ" itemprop="mainEntityOfPage url">
+      <figure class="thumb" aria-hidden="true">
+        <img
+          src="./images/news2.png"
+          alt="サービス設計ブループリントを公開しました"
+          loading="lazy"
+          decoding="async"
+          width="640" height="360"
+          itemprop="image">
+      </figure>
+      <div class="meta">
+        <time datetime="2025-07-15" itemprop="datePublished">2025/07/15</time>
+        <span class="tag">リリース</span>
+      </div>
+      <h2 class="card-title" itemprop="headline">サービス設計ブループリントを公開しました</h2>
+      <p class="card-excerpt" itemprop="description">
+        スポンサー・視聴者・運営がWin-Winになる仕組みを図解。今後のロードマップも掲載しています。
+      </p>
+    </a>
+  </article>
+
+  <!-- 3 -->
+  <article class="card" itemscope itemtype="https://schema.org/NewsArticle" data-tags="イベント">
+    <a class="card-link" href="#" aria-label="リードキャスティング型プラットフォーム企画を発表の詳細ページ" itemprop="mainEntityOfPage url">
+      <figure class="thumb" aria-hidden="true">
+        <img
+          src="./images/news3.png"
+          alt="リードキャスティング型プラットフォーム企画を発表"
+          loading="lazy"
+          decoding="async"
+          width="640" height="360"
+          itemprop="image">
+      </figure>
+      <div class="meta">
+        <time datetime="2025-06-30" itemprop="datePublished">2025/06/30</time>
+        <span class="tag">イベント</span>
+      </div>
+      <h2 class="card-title" itemprop="headline">リードキャスティング型プラットフォーム企画を発表</h2>
+      <p class="card-excerpt" itemprop="description">
+        実証イベントの開催概要と参加方法についてご案内します。
+      </p>
+    </a>
+  </article>
+</section>
+
+
+    <nav class="pagination" aria-label="ページ移動">
+      <button class="pager prev" disabled aria-disabled="true">前へ</button>
+      <ol class="pages">
+        <li><button class="page is-active" aria-current="page">1</button></li>
+        <li><button class="page">2</button></li>
+        <li><button class="page">3</button></li>
+      </ol>
+      <button class="pager next">次へ</button>
+    </nav>
+
+    <aside class="subscribe">
+      <h2>最新情報を受け取る</h2>
+      <p>ニュースRSSを購読して最新情報をチェック。</p>
+      <a class="btn btn-secondary" href="/feed.xml" rel="alternate">RSSを購読</a>
+    </aside>
   </main>
 
   <footer class="site-footer" role="contentinfo">
@@ -55,6 +167,66 @@
     <small>© <span id="y"></span> LEAD CAST</small>
   </footer>
 
+  <!-- 既存の挙動と合わせる（news内の簡易JSはnews.cssと独立） -->
+  <script>
+    // 年表示
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // ナビ開閉
+    const navBtn = document.querySelector('.nav-toggle');
+    const nav = document.querySelector('.global-nav');
+    if (navBtn) {
+      navBtn.addEventListener('click', () => {
+        const expanded = navBtn.getAttribute('aria-expanded') === 'true';
+        navBtn.setAttribute('aria-expanded', String(!expanded));
+        nav.classList.toggle('is-open');
+      });
+    }
+
+    // 検索 & フィルタ
+    const form = document.getElementById('newsSearchForm');
+    const input = document.getElementById('q');
+    const chips = [...document.querySelectorAll('.chip')];
+    const cards = [...document.querySelectorAll('.news-grid .card')];
+    let activeTag = 'all';
+
+    function applyFilter() {
+      const q = (input.value || '').toLowerCase();
+      cards.forEach(card => {
+        const tag = (card.getAttribute('data-tags') || '').toLowerCase();
+        const text = card.innerText.toLowerCase();
+        const matchQ = q ? text.includes(q) : true;
+        const matchTag = activeTag === 'all' ? true : tag.includes(activeTag);
+        card.style.display = (matchQ && matchTag) ? '' : 'none';
+      });
+    }
+
+    form.addEventListener('submit', e => { e.preventDefault(); applyFilter(); });
+    document.getElementById('clearSearch').addEventListener('click', () => { input.value=''; applyFilter(); });
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => c.setAttribute('aria-pressed', 'false'));
+        chip.setAttribute('aria-pressed', 'true');
+        activeTag = chip.dataset.tag.toLowerCase();
+        applyFilter();
+      });
+    });
+
+    // 並び替え（公開日の time 要素を参照）
+    const sortSel = document.getElementById('sort');
+    sortSel.addEventListener('change', () => {
+      const grid = document.querySelector('.news-grid');
+      const sorted = [...cards].sort((a,b) => {
+        const ad = new Date(a.querySelector('time').getAttribute('datetime'));
+        const bd = new Date(b.querySelector('time').getAttribute('datetime'));
+        return sortSel.value === 'oldest' ? ad - bd : bd - ad;
+      });
+      sorted.forEach(el => grid.appendChild(el));
+    });
+  </script>
+
+  <!-- プロジェクト既存のJSがあれば（元ファイル互換） -->
   <script src="dat/main.js" defer></script>
 </body>
 </html>

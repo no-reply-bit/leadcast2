@@ -6,61 +6,110 @@
   <title>お問い合わせ | LEAD CAST</title>
   <meta name="description" content="LEAD CASTへのお問い合わせはこちらから。資料請求・パイロット企画のご相談・スポンサー申込みを受け付けています。">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/contact.css">
 </head>
 <body>
   <a class="skip" href="#main">本文へ移動</a>
 
+
+  <!-- ===== Header（共通：talknote.cssに準拠） ===== -->
   <header class="site-header" role="banner">
-    <a class="logo" href="index.html">LEAD CAST</a>
-    <nav class="global-nav" aria-label="グローバルナビゲーション">
+    <a class="brand-logo" href="index.html" aria-label="LeadCast home">
+      <span class="brand-text">LeadCast</span>
+    </a>
+    <nav class="global-nav" id="gnav" aria-label="グローバルナビゲーション">
       <a href="company.html">会社情報</a>
-      <a href="services.html">サービス</a> <!-- 追加 -->
-      <a href="sponsors.html">スポンサーの皆さまへ</a>
+      <a href="index.html#about">About Us</a>
+      <a href="index.html#service">サービス</a>
       <a href="news.html">ニュース</a>
-      <a href="privacy.html">プライバシーポリシー</a>
-      <a href="tokushoho.html">特定商取引法に基づく表記</a>
-      <a aria-current="page" href="contact.html" class="btn-primary">お問い合わせ</a>
+      <a href="privacy.html" aria-current="page">ポリシー/基本方針</a>
+      <a href="contact.html" class="btn-primary">お問い合わせ</a>
     </nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="gnav" aria-label="メニューを開く">☰</button>
   </header>
+  <!-- ===== /Header ===== -->
 
   <main id="main" class="container">
-    <h1>お問い合わせ</h1>
-    <p>LEAD CASTへのご相談・資料請求・スポンサー申込みはこちらのフォームからお願いいたします。</p>
+    <header class="page-header">
+      <h1>お問い合わせ</h1>
+      <p class="lead">LEAD CASTへのご相談・資料請求・スポンサー申込みはこちらのフォームからお願いいたします。</p>
+    </header>
 
-    <form action="https://example.com/form-handler" method="post" class="contact-form">
-      <label for="name">お名前 <span class="required">必須</span></label>
-      <input type="text" id="name" name="name" required>
+    <section class="contact-section" aria-labelledby="contact-form-title">
+      <h2 id="contact-form-title" class="sr-only">お問い合わせフォーム</h2>
 
-      <label for="company">会社名 <span class="required">必須</span></label>
-      <input type="text" id="company" name="company" required>
+      <form action="https://example.com/form-handler" method="post" class="contact-form" novalidate>
+        <!-- 迷惑対策（ハニーポット） -->
+        <div class="hp" aria-hidden="true">
+          <label for="website">ウェブサイト（空欄のまま送信してください）</label>
+          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+        </div>
 
-      <label for="email">メールアドレス <span class="required">必須</span></label>
-      <input type="email" id="email" name="email" required>
+        <div class="field">
+          <label for="name">お名前 <span class="required" aria-hidden="true">必須</span></label>
+          <input type="text" id="name" name="name" required autocomplete="name">
+          <p class="error" id="err-name" aria-live="polite"></p>
+        </div>
 
-      <label for="tel">電話番号</label>
-      <input type="tel" id="tel" name="tel" placeholder="例: 03-1234-5678">
+        <div class="field">
+          <label for="company">会社名 <span class="required" aria-hidden="true">必須</span></label>
+          <input type="text" id="company" name="company" required autocomplete="organization">
+          <p class="error" id="err-company" aria-live="polite"></p>
+        </div>
 
-      <label for="type">お問い合わせ種別 <span class="required">必須</span></label>
-      <select id="type" name="type" required>
-        <option value="">選択してください</option>
-        <option value="資料請求">資料請求</option>
-        <option value="PoC相談">パイロット企画（PoC）のご相談</option>
-        <option value="スポンサー申込">スポンサー申込み</option>
-        <option value="その他">その他</option>
-      </select>
+        <div class="field">
+          <label for="email">メールアドレス <span class="required" aria-hidden="true">必須</span></label>
+          <input type="email" id="email" name="email" required inputmode="email" autocomplete="email" placeholder="example@domain.jp">
+          <p class="hint">確認メールをお送りします。受信可能なアドレスをご入力ください。</p>
+          <p class="error" id="err-email" aria-live="polite"></p>
+        </div>
 
-      <label for="message">お問い合わせ内容 <span class="required">必須</span></label>
-      <textarea id="message" name="message" rows="6" required></textarea>
+        <div class="field">
+          <label for="tel">電話番号</label>
+          <input type="tel" id="tel" name="tel" inputmode="tel" autocomplete="tel" placeholder="例: 03-1234-5678">
+        </div>
 
-      <div class="consent">
-        <input type="checkbox" id="agree" name="agree" required>
-        <label for="agree">プライバシーポリシーに同意します</label>
-      </div>
+        <div class="field">
+          <label for="type">お問い合わせ種別 <span class="required" aria-hidden="true">必須</span></label>
+          <select id="type" name="type" required>
+            <option value="">選択してください</option>
+            <option>資料請求</option>
+            <option>パイロット企画（PoC）のご相談</option>
+            <option>スポンサー申込み</option>
+            <option>その他</option>
+          </select>
+          <p class="error" id="err-type" aria-live="polite"></p>
+        </div>
 
-      <button type="submit" class="btn-primary">送信する</button>
-    </form>
+        <div class="field full">
+          <label for="message">お問い合わせ内容 <span class="required" aria-hidden="true">必須</span></label>
+          <textarea id="message" name="message" rows="7" required></textarea>
+          <p class="error" id="err-message" aria-live="polite"></p>
+        </div>
 
-    <p class="note">※ 本フォームで取得した個人情報は、当社サービスのご案内・ご連絡にのみ利用し、適切に管理いたします。</p>
+        <fieldset class="consent">
+          <legend class="sr-only">同意</legend>
+          <label class="checkbox">
+            <input type="checkbox" id="agree" name="agree" required>
+            <span>プライバシーポリシーに同意します</span>
+          </label>
+        </fieldset>
+
+        <div class="actions">
+          <button type="submit" class="btn-primary">送信する</button>
+        </div>
+
+        <p class="note">※ 本フォームで取得した個人情報は、当社サービスのご案内・ご連絡にのみ利用し、適切に管理いたします。</p>
+      </form>
+    </section>
+
+    <section class="alt-contacts" aria-labelledby="alt-contacts-title">
+      <h2 id="alt-contacts-title">その他の連絡手段</h2>
+      <address>
+        <p>Eメール: <a href="mailto:info@example.jp">info@example.jp</a></p>
+        <p>お電話: <a href="tel:0312345678">03-1234-5678</a>（平日10:00-17:00）</p>
+      </address>
+    </section>
   </main>
 
   <footer class="site-footer" role="contentinfo">
@@ -72,6 +121,7 @@
     <small>© <span id="y"></span> LEAD CAST</small>
   </footer>
 
-  <script src="dat/main.js" defer></script>
+  <!-- main.js のパス修正（既存サイトと整合） -->
+  <script src="main.js" defer></script>
 </body>
 </html>

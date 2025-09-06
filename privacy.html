@@ -5,26 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>プライバシーポリシー | LEAD CAST</title>
   <meta name="description" content="LEAD CASTのプライバシーポリシー。取得する情報、利用目的、第三者提供、外部送信、開示請求、反社会的勢力の排除等について定めます。">
+  <!-- 共通スタイル -->
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/index.css">
   <link rel="stylesheet" href="css/talknote.css">
+  <!-- このページ専用 -->
+  <link rel="stylesheet" href="css/privacy.css">
 </head>
 <body>
   <a class="skip" href="#main">本文へ移動</a>
 
+
+  <!-- ===== Header（共通：talknote.cssに準拠） ===== -->
   <header class="site-header" role="banner">
-    <a class="logo" href="index.html">LEAD CAST</a>
-    <nav class="global-nav" aria-label="グローバルナビゲーション">
+    <a class="brand-logo" href="index.html" aria-label="LeadCast home">
+      <img src="images/logo.png" alt="LeadCast ロゴ">
+      <span class="brand-text">LeadCast</span>
+    </a>
+    <nav class="global-nav" id="gnav" aria-label="グローバルナビゲーション">
       <a href="company.html">会社情報</a>
-      <a href="services.html">サービス</a>
-      <a href="sponsors.html">スポンサーの皆さまへ</a>
+      <a href="index.html#about">About Us</a>
+      <a href="index.html#service">サービス</a>
       <a href="news.html">ニュース</a>
+      <a href="privacy.html" aria-current="page">ポリシー/基本方針</a>
       <a href="contact.html" class="btn-primary">お問い合わせ</a>
     </nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="gnav" aria-label="メニューを開く">☰</button>
   </header>
+  <!-- ===== /Header ===== -->
 
-  <main id="main" class="container">
-    <h1>プライバシーポリシー</h1>
-    <p>合同会社LEAD CAST（以下「当社」）は、個人情報の保護に関する法律その他関係法令・ガイドラインを遵守し、以下のとおり個人情報を適切に取り扱います。</p>
+  <main id="main" class="container policy-single" role="main">
+    <h1 class="page-title"></h1>
+    <p class="lead">合同会社LEAD CAST（以下「当社」）は、個人情報の保護に関する法律その他関係法令・ガイドラインを遵守し、以下のとおり個人情報を適切に取り扱います。</p>
 
     <section>
       <h2>1. 取得する情報</h2>
@@ -98,7 +110,6 @@
       </dl>
     </section>
 
-    <!-- 追加：反社会的勢力の排除 -->
     <section>
       <h2>12. 反社会的勢力の排除</h2>
       <p>当社は、暴力団、暴力団関係企業、総会屋、社会運動等標ぼうゴロ、特殊知能暴力集団その他これに準ずる者（以下「反社会的勢力」）を一切排除します。当社は、反社会的勢力との一切の取引関係を持たず、また将来にわたり関与しません。万一、取引関係者が反社会的勢力であることが判明した場合、当社は何らの催告を要せず当該取引を解除・解約できるものとし、これにより生じた損害についても一切の責任を負いません。</p>
@@ -108,17 +119,15 @@
   </main>
 
   <footer class="site-footer" role="contentinfo">
-    <nav>
+    <nav aria-label="フッターナビゲーション">
       <a href="company.html">会社情報</a>
-      <a href="services.html">サービス</a>
       <a href="news.html">ニュース</a>
       <a href="contact.html">お問い合わせ</a>
-      <a href="privacy.html">プライバシーポリシー</a>
-      <a href="tokushoho.html">特定商取引法に基づく表記</a>
     </nav>
     <small>© <span id="y"></span> LEAD CAST</small>
   </footer>
 
+  <!-- 共通スクリプト -->
   <script src="dat/main.js" defer></script>
 </body>
 </html>

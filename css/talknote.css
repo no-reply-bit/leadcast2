@@ -775,7 +775,7 @@ body.has-reveal.is-ready .hero .hero-buttons{
 }
 
 /* body 固定背景（全画面テクスチャ） */
-body::before {
+body.page-top::before {
   content: "";
   position: fixed;
   inset: 0;
