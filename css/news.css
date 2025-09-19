@@ -23,7 +23,7 @@ body{
 
 /* スキップリンク */
 .skip{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
-.skip:focus{left:16px;top:16px;width:auto;height:auto;background:#000;color:#fff;padding:.5rem .75rem;border-radius:8px}
+.skip:focus{left:16px;top:16px;width:auto;height:auto;background:#3A3A3A;color:#F2F2F2;padding:.5rem .75rem;border-radius:8px}
 
 /* ===== ヘッダー ===== */
 .site-header{
@@ -36,14 +36,14 @@ body{
   display:flex;align-items:center;gap:24px;
   max-width:1100px;margin:0 auto;padding:14px 20px;
 }
-.logo{color:#fff;text-decoration:none;font-weight:800;letter-spacing:.2px}
+.logo{color:#F2F2F2;text-decoration:none;font-weight:800;letter-spacing:.2px}
 .global-nav{margin-left:auto;display:flex;gap:18px;align-items:center}
 .global-nav a{
   color:var(--text);text-decoration:none;padding:8px 10px;border-radius:10px;
   transition:all .2s;
 }
 .global-nav a:hover{background:rgba(255,255,255,.06)}
-.global-nav a[aria-current="page"]{color:#fff;box-shadow:inset 0 -2px 0 var(--brand)}
+.global-nav a[aria-current="page"]{color:#F2F2F2;box-shadow:inset 0 -2px 0 var(--brand)}
 .btn-primary{
   background:linear-gradient(90deg,var(--brand),var(--brand-2));
   color:#001018;border:none

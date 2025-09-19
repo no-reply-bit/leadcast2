@@ -531,62 +531,30 @@ window.addEventListener('orientationchange', applyParallaxScale);
   window.addEventListener('orientationchange', killServiceVideo);
 })();
 
-// ===== company.html 部分読み込みローダー =====
-document.addEventListener("DOMContentLoaded", () => {
-  // 1) company.css を動的読込（index.htmlを汚さない）
-  (function ensureCompanyCSS() {
-    const id = "css-company";
-    if (!document.getElementById(id)) {
-      const link = document.createElement("link");
-      link.id = id;
-      link.rel = "stylesheet";
-      link.href = "css/company.css";
-      document.head.appendChild(link);
-    }
-  })();
 
-  // 2) company.html の <main> 内だけを抽出して差し込み
-  injectHTML("#company-section", "company.html", {
-    rootSelector: "main",               // ← company.htmlのここだけ入れる:contentReference[oaicite:4]{index=4}
-    idPrefix: "company-",               // ← index内の既存IDと重複回避（#access 等）
-    removeSelectors: ["header", "footer", "script"] // 念のため
-  });
+const img = document.querySelector('.svc-anim');
+img.addEventListener('click', () => {
+  img.style.animation = 'shake 0.5s';
+  img.addEventListener('animationend', () => {
+    img.style.animation = '';
+  }, { once: true });
 });
 
-// 汎用：外部HTMLをfetch→DOMParserでパース→必要部分だけ注入
-async function injectHTML(targetSelector, url, {
-  rootSelector = null,
-  removeSelectors = [],
-  idPrefix = "",
-  keepIDs = []
-} = {}) {
-  const target = document.querySelector(targetSelector);
-  if (!target) return;
+// ====== KNOWLEDGECAST アニメーション（パラパラ漫画風） ======
+(function(){
+  const el = document.getElementById('kcFx');
+  if(!el) return;
 
-  const res = await fetch(url, { cache: "no-cache" });
-  const html = await res.text();
-  const doc = new DOMParser().parseFromString(html, "text/html");
+  const frames = (el.dataset.frames || '').split(',').map(s => s.trim()).filter(Boolean);
+  if(frames.length < 2) return;
 
-  // 抽出するルート（なければ <body>）
-  let root = rootSelector ? doc.querySelector(rootSelector) : doc.body;
-  if (!root) return;
+  let i = 0;
+  const FPS = 5;               // 1秒間に5コマ
+  const interval = 1000 / FPS; // 切り替え間隔
 
-  // 不要要素の削除
-  removeSelectors.forEach(sel =>
-    root.querySelectorAll(sel).forEach(el => el.remove())
-  );
+  setInterval(() => {
+    i = (i + 1) % frames.length;
+    el.src = frames[i];
+  }, interval);
+})();
 
-  // ID重複を避けるため、id属性と #アンカーをプレフィックスで書き換え
-  if (idPrefix) {
-    root.querySelectorAll("[id]").forEach(el => {
-      if (!keepIDs.includes(el.id)) el.id = idPrefix + el.id;
-    });
-    root.querySelectorAll('a[href^="#"]').forEach(a => {
-      const old = a.getAttribute("href").slice(1);
-      if (old && !keepIDs.includes(old)) a.setAttribute("href", "#" + idPrefix + old);
-    });
-  }
-
-  // 中身を注入
-  target.append(...Array.from(root.children));
-}

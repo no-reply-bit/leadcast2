@@ -4,105 +4,113 @@
 
 /* ベース */
 html { scroll-behavior: smooth; }
-:root{
+:root {
   --brand:#0d3df0;
   --ink:#0b1220;
   --muted:#a7b2d8;
   --accent:#ffc400;
 }
 
-/* 共通：このページだけに効かせる */
+/* 共通：会社情報セクション */
 .page-company {
-  color: #000;
-  background: url("../images/haikei5.jpg") no-repeat center center fixed;
-  background-size: cover;
+  color: #3A3A3A;
+  /* 背景は白で塗りつぶさない */
+  background: transparent;
 }
-.page-company .container { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+
+.page-company .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
 
 /* ヒーロー */
-.page-company .page-hero{ padding: clamp(56px,6vw,88px) 0 24px; }
-.page-company .page-hero h1{
-  font-weight:800; font-size:clamp(28px,4vw,40px); margin:0 0 8px;
+.page-company .page-hero {
+  padding: clamp(56px,6vw,88px) 0 24px;
 }
-.page-company .page-hero p{ color:#000; }
+.page-company .page-hero h1 {
+  font-weight:800;
+  font-size:clamp(28px,4vw,40px);
+  margin:0 0 8px;
+}
+.page-company .page-hero p {
+  color:#3A3A3A;
+}
 
-/* セクションの並び（縦積み固定） */
-.page-company .company-grid{
-  display:grid; grid-template-columns:1fr;
+/* セクションの並び */
+.page-company .company-grid {
+  display:grid;
+  grid-template-columns:1fr;
   gap: clamp(20px,3vw,40px);
 }
 
-/* ========== 会社概要（左：見出し／右：情報） ========== */
-.page-company .company-overview{
+/* ========== 会社概要 ========== */
+.page-company .company-overview {
   background: transparent;
   box-shadow: none;
   border-radius: 0;
-  color:#000;
-  padding: 0; margin-top: 8px;
+  color:#3A3A3A;
+  padding: 0;
+  margin-top: 8px;
 
   display:grid;
   grid-template-columns: minmax(180px,260px) 1fr;
-  gap: 16px 40px; align-items:start;
+  gap: 16px 40px;
+  align-items:start;
 }
-.page-company .company-overview .kv{
-  grid-column:1; grid-row:1;
+.page-company .company-overview .kv {
+  grid-column:1;
+  grid-row:1;
   margin:0;
   font-weight:800;
   font-size: clamp(28px,4.2vw,44px);
 }
-.page-company .company-overview dl{
-  grid-column:2; grid-row:1;
-  display:grid; grid-template-columns: 200px 1fr;
-  gap: 0 28px; margin:0;
+.page-company .company-overview dl {
+  grid-column:2;
+  grid-row:1;
+  display:grid;
+  grid-template-columns: 200px 1fr;
+  gap: 0 28px;
+  margin:0;
 }
 .page-company .company-overview dl > dt,
-.page-company .company-overview dl > dd{
+.page-company .company-overview dl > dd {
   padding: 20px 0;
-  border-bottom: 1px solid rgba(255,255,255,.28);
+  border-bottom: 1px solid #3A3A3A;
 }
-.page-company .company-overview dl > dt{
+.page-company .company-overview dl > dt {
   font-weight:700;
   font-size: clamp(14px,1.4vw,18px);
-  color: rgba(255,255,255,.95);
+  color: #3A3A3A;
 }
-.page-company .company-overview dl > dd{
+.page-company .company-overview dl > dd {
   font-size: clamp(16px,1.9vw,24px);
   line-height: 1.9;
 }
-.page-company .company-overview .divider{ display:none; }
+.page-company .company-overview .divider { display:none; }
 
-/* ========== 沿革（左：見出し／右：年表） ========== */
-
-/* ===== 沿革（2カラム：レール画像 + 内容） ===== */
+/* ========== 沿革 ========== */
 .page-company .history-two {
-  color:#000;
+  color:#3A3A3A;
   margin-top:32px;
-
-  /* 中央寄せ用の最大幅 */
-  max-width: 1000px;   /* 好きな幅に調整（例：960〜1100pxくらい） */
+  max-width: 1000px;
   margin-left:auto;
   margin-right:auto;
 }
-
 .page-company .history-two h2 {
   margin:0 0 16px;
   font-weight:800;
   font-size: clamp(28px,4.2vw,44px);
 }
-
-/* レール幅や画像サイズを変えたい時はここだけ調整 */
 .page-company .history-rail {
   --rail-col: 90px;
   --rail-img-w: 48px;
   --stick-top: 80px;
-
   display:grid;
-  grid-template-columns: var(--rail-col) 1fr; /* レール / 右コンテンツ */
+  grid-template-columns: var(--rail-col) 1fr;
   gap: 24px 32px;
   align-items:start;
 }
-
-/* 中央レール */
 .page-company .history-rail .rail {
   width:100%;
   min-height:100%;
@@ -111,8 +119,6 @@ html { scroll-behavior: smooth; }
   top: var(--stick-top);
   border-radius:6px;
 }
-
-/* 右：イベントリスト */
 .page-company .history-rail .events {
   margin:0;
   padding:0;
@@ -127,7 +133,6 @@ html { scroll-behavior: smooth; }
   margin:0 0 6px;
   font-weight:800;
   font-size: clamp(16px,1.7vw,20px);
-  letter-spacing:.02em;
 }
 .page-company .history-rail .events h3 {
   margin:0 0 6px;
@@ -140,7 +145,7 @@ html { scroll-behavior: smooth; }
   font-size: clamp(15px,1.5vw,18px);
 }
 
-/* スマホ */
+/* スマホ調整 */
 @media (max-width:960px) {
   .page-company .history-rail {
     --rail-col:72px;
@@ -156,95 +161,123 @@ html { scroll-behavior: smooth; }
   .page-company .history-rail .rail { display:none; }
 }
 
-
 /* ========== アクセス ========== */
-.page-company .access-grid{ display:grid; gap:24px; margin-top: clamp(16px,2vw,24px); }
-@media (min-width:960px){
-  .page-company .access-grid{ grid-template-columns:420px 1fr; }
+.page-company .access-grid {
+  display:grid;
+  gap:24px;
+  margin-top: clamp(16px,2vw,24px);
 }
-.page-company .access-card{
+@media (min-width:960px) {
+  .page-company .access-grid {
+    grid-template-columns:420px 1fr;
+  }
+}
+.page-company .access-card {
   background: rgba(255,255,255,.06);
   border-radius: 12px;
   padding: clamp(16px,2.5vw,24px);
   backdrop-filter: blur(2px);
 }
-.page-company .access-card h2{ margin:0 0 8px; font-weight:800; font-size: clamp(20px,3vw,26px); }
-.page-company .access-list{ margin:0; }
-.page-company .access-list dt{ font-weight:700; margin-top:10px; }
-.page-company .access-list dd{ margin:4px 0 0 0; color:#000; opacity:.95; }
-.page-company .map-wrap{ aspect-ratio:16/9; background:#0c2a7e; border-radius:12px; overflow:hidden; }
-.page-company .map-wrap iframe{ width:100%; height:100%; border:0; }
+.page-company .access-card h2 {
+  margin:0 0 8px;
+  font-weight:800;
+  font-size: clamp(20px,3vw,26px);
+}
+.page-company .access-list { margin:0; }
+.page-company .access-list dt { font-weight:700; margin-top:10px; }
+.page-company .access-list dd { margin:4px 0 0 0; color:#3A3A3A; opacity:.95; }
+.page-company .map-wrap {
+  aspect-ratio:16/9;
+  background:#0c2a7e;
+  border-radius:12px;
+  overflow:hidden;
+}
+.page-company .map-wrap iframe {
+  width:100%;
+  height:100%;
+  border:0;
+}
 
 /* CTA */
-.page-company .cta{ text-align:center; padding: clamp(24px,4vw,40px) 0; }
-.page-company .cta h2{ font-weight:800; margin:0 0 8px; }
-.page-company .cta p{ color:#000; margin:0 0 16px; }
+.page-company .cta {
+  text-align:center;
+  padding: clamp(24px,4vw,40px) 0;
+}
+.page-company .cta h2 {
+  font-weight:800;
+  margin:0 0 8px;
+}
+.page-company .cta p {
+  color:#3A3A3A;
+  margin:0 0 16px;
+}
 
 /* フェード */
-.page-company .fade-section{ opacity:0; transform:translateY(12px); transition:opacity .6s ease, transform .6s ease; }
-.page-company .fade-section.is-visible{ opacity:1; transform:none; }
-
-/* ヘッダー下の余白 */
-.page-company .site-header + main{ margin-top: clamp(12px,2vw,16px); }
-
-/* 現在地表示 */
-.page-company [aria-current="page"]{ text-decoration:underline; text-underline-offset:4px; }
+.page-company .fade-section {
+  opacity:0;
+  transform:translateY(12px);
+  transition:opacity .6s ease, transform .6s ease;
+}
+.page-company .fade-section.is-visible {
+  opacity:1;
+  transform:none;
+}
 
 /* レスポンシブ */
 @media (max-width: 840px){
   .page-company .company-overview,
-  .page-company .timeline{
-    grid-template-columns: 1fr; gap:16px;
+  .page-company .timeline {
+    grid-template-columns: 1fr;
+    gap:16px;
   }
-  .page-company .company-overview dl{
+  .page-company .company-overview dl {
     grid-template-columns:1fr;
   }
-  .page-company .company-overview dl > dt{ padding-top:14px; border-bottom:none; opacity:.9; }
-  .page-company .company-overview dl > dd{ padding-top:4px; }
-  .page-company .tl{ padding-left:92px; }
-  .page-company .tl time{ width:80px; }
+  .page-company .company-overview dl > dt {
+    padding-top:14px;
+    border-bottom:none;
+    opacity:.9;
+  }
+  .page-company .company-overview dl > dd {
+    padding-top:4px;
+  }
+  .page-company .tl { padding-left:92px; }
+  .page-company .tl time { width:80px; }
 }
 
-/* ========== TOPページ専用の背景（会社情報には効かない） ========== */
-body.page-top::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background: url("../images/haikei3.jpg") center top / cover no-repeat;
+.svc-anim {
+  animation: float 3s ease-in-out infinite;
 }
 
-
-/* ===== 会社概要のタイトル（dt）を黒に ===== */
-.page-company .company-overview dl > dt {
-  color: #000 !important;   /* 黒に強制 */
-  opacity: 1 !important;    /* 薄くならないように */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
-/* ===== ヘッダーのリンク文字色を黒に ===== */
-.page-company .site-header,
-.page-company .site-header a,
-.page-company .site-header .brand-text {
-  color: #000 !important;
-  fill: #000 !important;
+@keyframes pop {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.05) rotate(-2deg); }
 }
 
-.page-company .site-header a {
-  text-decoration: none;
+.svc-anim {
+  animation: pop 2s ease-in-out infinite;
 }
 
-/* ===== 会社概要の下線を黒に ===== */
-.page-company .company-overview dl > dt,
-.page-company .company-overview dl > dd {
-  border-bottom: 1px solid #000 !important;
+.svc-figure {
+  position: relative;
+}
+.svc-thumb-base {
+  display: block;
+  width: 100%;
+}
+.svc-thumb-fx {
+  position: absolute;
+  left: 5%;  /* ←パーツ位置に調整 */
+  top: 0;    /* ←パーツ位置に調整 */
+  width: 120px; /* サイズも調整 */
 }
 
-/* ===== 沿革のテキストも黒に（統一感のため） ===== */
-.page-company .timeline,
-.page-company .timeline h2,
-.page-company .timeline .tl,
-.page-company .timeline .tl li,
-.page-company .timeline .tl time,
-.page-company .timeline .tl li div {
-  color: #000 !important;
-}
