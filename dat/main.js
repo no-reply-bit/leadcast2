@@ -530,3 +530,63 @@ window.addEventListener('orientationchange', applyParallaxScale);
                        : mq.addListener && mq.addListener(e => e.matches && killServiceVideo()));
   window.addEventListener('orientationchange', killServiceVideo);
 })();
+
+// ===== company.html 部分読み込みローダー =====
+document.addEventListener("DOMContentLoaded", () => {
+  // 1) company.css を動的読込（index.htmlを汚さない）
+  (function ensureCompanyCSS() {
+    const id = "css-company";
+    if (!document.getElementById(id)) {
+      const link = document.createElement("link");
+      link.id = id;
+      link.rel = "stylesheet";
+      link.href = "css/company.css";
+      document.head.appendChild(link);
+    }
+  })();
+
+  // 2) company.html の <main> 内だけを抽出して差し込み
+  injectHTML("#company-section", "company.html", {
+    rootSelector: "main",               // ← company.htmlのここだけ入れる:contentReference[oaicite:4]{index=4}
+    idPrefix: "company-",               // ← index内の既存IDと重複回避（#access 等）
+    removeSelectors: ["header", "footer", "script"] // 念のため
+  });
+});
+
+// 汎用：外部HTMLをfetch→DOMParserでパース→必要部分だけ注入
+async function injectHTML(targetSelector, url, {
+  rootSelector = null,
+  removeSelectors = [],
+  idPrefix = "",
+  keepIDs = []
+} = {}) {
+  const target = document.querySelector(targetSelector);
+  if (!target) return;
+
+  const res = await fetch(url, { cache: "no-cache" });
+  const html = await res.text();
+  const doc = new DOMParser().parseFromString(html, "text/html");
+
+  // 抽出するルート（なければ <body>）
+  let root = rootSelector ? doc.querySelector(rootSelector) : doc.body;
+  if (!root) return;
+
+  // 不要要素の削除
+  removeSelectors.forEach(sel =>
+    root.querySelectorAll(sel).forEach(el => el.remove())
+  );
+
+  // ID重複を避けるため、id属性と #アンカーをプレフィックスで書き換え
+  if (idPrefix) {
+    root.querySelectorAll("[id]").forEach(el => {
+      if (!keepIDs.includes(el.id)) el.id = idPrefix + el.id;
+    });
+    root.querySelectorAll('a[href^="#"]').forEach(a => {
+      const old = a.getAttribute("href").slice(1);
+      if (old && !keepIDs.includes(old)) a.setAttribute("href", "#" + idPrefix + old);
+    });
+  }
+
+  // 中身を注入
+  target.append(...Array.from(root.children));
+}
