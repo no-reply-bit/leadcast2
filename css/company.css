@@ -281,3 +281,48 @@ html { scroll-behavior: smooth; }
   width: 120px; /* サイズも調整 */
 }
 
+
+
+
+/* 会社概要*/
+
+@media (max-width: 768px){
+  .company-overview{
+    padding: 20px 16px;
+    background: #fff;
+    border-radius: 8px;
+  }
+
+  /* タイトルを表の上に */
+  .company-overview h2.kv{
+    writing-mode: horizontal-tb !important; /* 横書き */
+    position: static !important;            /* 左固定を解除 */
+    transform: none !important;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 20px;
+    text-align: center;
+  }
+
+  /* ラベルと値を2カラムっぽく整列 */
+  .company-overview dl{
+    display: grid;
+    grid-template-columns: 6em 1fr; /* 左に項目、右に内容 */
+    column-gap: 12px;
+    row-gap: 8px;
+  }
+
+  .company-overview dt{
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #555;
+    white-space: nowrap;
+  }
+
+  .company-overview dd{
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+    color: #333;
+  }
+}

@@ -18,8 +18,8 @@
   
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/index.css">
-  <link rel="stylesheet" href="css/talknote.css">
   <link rel="stylesheet" href="css/company.css">
+  <link rel="stylesheet" href="css/talknote.css">
 
 
   <!-- フォント追加 -->
@@ -58,13 +58,12 @@
 <!-- ===== 背景1（ここから）: haikei3.jpg（Heroだけ） ===== -->
 <section class="bg-section bg1 hero hero--split hero--parallax has-decor">
   <div class="bg-decor" aria-hidden="true">
-    <!--<img class="decor decor-cactus" src="images/cactus.png" alt="">-->
+    <!-- PC：サボテンのみ ／ SP：サボテン + 雲 -->
     <img class="decor decor-cactus" src="images/illust_03.png" alt="">
-    <!--<img class="decor decor-cloud"  src="images/illust_09.png"  alt="">-->
-    <!--<img class="decor decor-cloud"  src="images/cloud2.png" alt="">-->
+    <img class="decor decor-cloud sp-only" src="images/illust_01.png" alt="">
   </div>
 
-  <div class="hero-inner container fade-section">   <!-- ← ここだけを“ふわっ” -->
+  <div class="hero-inner container fade-section">
     <div class="hero-text">
       <p class="eyebrow">つながりを価値に変える</p>
       <h1 class="main-title">
@@ -73,26 +72,20 @@
       </h1>
       <p class="brand">LeadCast</p>
 
-
-<!-- モバイル専用：ブランド名の直後に画像を表示 -->
-<div class="hero-image hero-image--mobile">
-  <img src="images/illust_01.png" alt="LEAD CAST サービス画面">
-</div>
-
-
-
-
       <div class="hero-buttons">
         <a href="contact.html" class="btn-primary btn-large">お問い合わせ</a>
         <a href="contact.html" class="btn-secondary btn-large">資料請求</a>
       </div>
     </div>
+
+    <!-- 右側のPC用画像はそのまま -->
     <div class="hero-image">
       <img src="images/illust_01.png" alt="LEAD CAST サービス画面">
     </div>
   </div>
 </section>
 <!-- ===== 背景1（ここまで） ===== -->
+
 
 <!-- ===== スクロールすると出てくる実績セクション（ここから）（青地・白文字） ===== -->
 <section class="stats-band bg1" aria-label="導入実績">
@@ -160,17 +153,18 @@
 <!-- ===== COMPANY（会社情報）（ここから） ===== -->
 <div class="page-company" id="company">
 
-  <section class="company-grid">
-    <section class="company-overview fade-section" aria-label="会社概要">
-      <h2 class="kv">会社概要</h2>
-      <dl>
-        <dt>会社名</dt><dd>Talknote株式会社（英文社名：Talknote, Inc.）</dd>
-        <dt>事業内容</dt><dd>情報共有プラットフォーム「Talknote」の運営・管理</dd>
-        <dt>役員</dt><dd>代表取締役 小池 はる</dd>
-        <dt>資本金</dt><dd>98,584,273円</dd>
-        <dt>所在地</dt><dd>〒102-0074 東京都千代田区九段南1-6-5 九段会館テラス1F</dd>
-      </dl>
-    </section>
+<section class="company-grid">
+  <section class="company-overview fade-section" aria-label="会社概要">
+    <h2 class="kv">会社概要</h2>
+    <dl>
+      <dt>会社名</dt><dd>LEADCAST株式会社（英文社名：LEADCAST Inc.）</dd>
+      <dt>事業内容</dt><dd>BtoBリードジェネレーション基盤「LeadCast」の開発・運営</dd>
+      <dt>役員</dt><dd>代表取締役 石橋 かずお</dd>
+      <dt>資本金</dt><dd>10,000,000円</dd>
+      <dt>所在地</dt><dd>〒102-0074 東京都千代田区九段南1-6-5</dd>
+    </dl>
+  </section>
+</section>
 
 <section class="history-two fade-section" aria-label="沿革">
   <h2>沿革</h2>
@@ -230,8 +224,6 @@
       </ul>
   </div>
 </section>
-
-
 </div>
 <!-- ===== COMPANY（会社情報）（ここまで） ===== -->
 
@@ -420,6 +412,7 @@
 
   <!-- Scripts（ここから） -->
   <script src="dat/main.js" defer></script>
+  <script src="dat/main2.js" defer></script>
   <!-- Scripts（ここまで） -->
 </body>
 </html>

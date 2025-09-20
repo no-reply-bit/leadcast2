@@ -452,53 +452,6 @@ mq.addEventListener ? mq.addEventListener('change', applyParallaxScale)
 window.addEventListener('orientationchange', applyParallaxScale);
 
 
-// === Mobile nav toggle ===
-(() => {
-  const btn = document.querySelector('.nav-toggle');
-  const nav = document.getElementById('gnav');
-  if (!btn || !nav) return;
-  const toggle = () => {
-    const open = nav.classList.toggle('is-open');
-    btn.setAttribute('aria-expanded', open);
-    document.body.classList.toggle('no-scroll', open);
-  };
-  btn.addEventListener('click', toggle);
-  nav.addEventListener('click', e => { if (e.target.closest('a')) toggle(); });
-})();
-
-// ===== 固定お問い合わせボタン =====
-
-
-
-
-
-// === Mobile nav toggle : robust ===
-(function(){
-  function init(){
-    const btn = document.querySelector('.nav-toggle');
-    const nav = document.getElementById('gnav');
-    if (!btn || !nav) return;
-
-    const open  = ()=>{ nav.classList.add('is-open'); btn.setAttribute('aria-expanded','true'); document.body.classList.add('no-scroll'); };
-    const close = ()=>{ nav.classList.remove('is-open'); btn.setAttribute('aria-expanded','false'); document.body.classList.remove('no-scroll'); };
-    const toggle= ()=> nav.classList.contains('is-open') ? close() : open();
-
-    btn.addEventListener('click', toggle);
-    // メニュー内リンクで自動クローズ
-    nav.addEventListener('click', e => { if (e.target.closest('a')) close(); });
-    // ESCで閉じる／外側タップで閉じる
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
-    document.addEventListener('click', e => {
-      if (!nav.classList.contains('is-open')) return;
-      if (!e.target.closest('#gnav') && !e.target.closest('.nav-toggle')) close();
-    }, {passive:true});
-  }
-  if (document.readyState === 'complete') init();
-  else window.addEventListener('load', init);
-})();
-
-
-
 
 // === SERVICE動画：SPでは読み込み自体を止める ===
 (() => {
@@ -558,3 +511,18 @@ img.addEventListener('click', () => {
   }, interval);
 })();
 
+// Mobile Nav（DOMContentLoadedで安全に）
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.querySelector('.nav-toggle');
+  const nav = document.getElementById('gnav');
+  if (!btn || !nav) return;
+  const open  = () => { nav.classList.add('is-open'); btn.setAttribute('aria-expanded','true'); document.body.classList.add('no-scroll'); };
+  const close = () => { nav.classList.remove('is-open'); btn.setAttribute('aria-expanded','false'); document.body.classList.remove('no-scroll'); };
+  const toggle = () => (nav.classList.contains('is-open') ? close() : open());
+  btn.addEventListener('click', toggle);
+  nav.addEventListener('click', e => { if (e.target.closest('a')) close(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.addEventListener('click', e => { if (!nav.classList.contains('is-open')) return;
+    if (!e.target.closest('#gnav') && !e.target.closest('.nav-toggle')) close();
+  }, { passive:true });
+});

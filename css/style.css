@@ -27,10 +27,11 @@ img{max-width:100%;display:block}
 
 /* ==== Global Background (全ページ共通) ==== */
 body{
-  background-color: #F2F2F2fff; /* フォールバック */
+  background-color: #F2F2F2; /* フォールバック */
   background-image: url("../images/haikei5.jpg"); /* ←拡張子: jpg に注意 */
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
   background-attachment: fixed; /* パララックス風に固定 */
 }
+
