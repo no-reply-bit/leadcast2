@@ -1,0 +1,101 @@
+/* ====== Base ====== */
+:root{
+  --max:1200px;
+  --pad:clamp(16px,4vw,48px);
+  --gap:clamp(16px,4vw,48px);
+  --header-h:68px;
+  --font-body:"NotoSansJP","Noto Sans JP","Hiragino Sans","Yu Gothic",
+              system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+html{font-size:16px}
+body{
+  font-family:var(--font-body);
+  line-height:1.7;color:#111;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+.container{max-width:var(--max);margin-inline:auto;padding-inline:var(--pad)}
+
+/* 背景（安全版） */
+body{background:#F2F2F2}
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background: url("../images/haikei5.jpg") center/cover no-repeat;
+}
+
+/* ====== Header ====== */
+.site-header{
+  position:sticky;top:0;z-index:1000;height:var(--header-h);
+  background:#F2F2F2;border-bottom:1px solid #eee;
+  display:flex;align-items:center;gap:16px;padding-inline:var(--pad);
+}
+.brand-logo img{height:40px;width:auto;object-fit:contain} /* ロゴ常時小さめ */
+.global-nav{margin-left:auto;display:flex;gap:16px;align-items:center}
+.nav-toggle{display:none;margin-left:auto;font-size:20px;background:transparent;border:0}
+
+/* ボタン（共通） */
+.btn-primary{display:inline-block;padding:10px 16px;border-radius:12px;background:#111;color:#fff}
+a.btn-primary.btn-contact-float{color:#fff !important} /* 右上お問い合わせを白抜き固定 */
+
+/* ====== Hero ====== */
+.hero{
+  background:linear-gradient(180deg,#f6f7fb,transparent);
+  padding-block: calc(var(--header-h) + 16px) 32px;
+  overflow:visible; /* はみ出し防止（hiddenを無効化） */
+}
+.hero .inner{
+  max-width:var(--max);margin-inline:auto;padding-inline:var(--pad);
+  display:grid;grid-template-columns:1.1fr 0.9fr;align-items:center;gap:var(--gap);
+}
+.hero .copy{max-width:60ch}
+.hero .image{justify-self:end}
+.hero .image img{
+  width:min(42vw,560px);height:auto;object-fit:contain;contain:content;
+}
+
+/* ====== Sections（例） ====== */
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap);margin:40px auto}
+.grid-3 article{padding:20px;border:1px solid #eee;border-radius:16px;background:#F2F2F2}
+.cta{text-align:center;margin:64px auto}
+.table-like{display:grid;grid-template-columns:160px 1fr;gap:12px;align-items:center}
+.contact-form{display:grid;gap:12px;max-width:640px}
+.contact-form input,.contact-form textarea,.contact-form select{
+  width:100%;padding:10px;border:1px solid #ddd;border-radius:10px
+}
+
+/* ====== Footer ====== */
+.site-footer{
+  margin-top:64px;border-top:1px solid #eee;padding:24px var(--pad);
+  display:flex;justify-content:space-between;align-items:center;gap:16px;
+}
+
+/* ====== Type（折返し安定化） ====== */
+:root{--lh-heading:1.25;--track-heading:.02em}
+h1,h2,h3{line-height:var(--lh-heading);letter-spacing:var(--track-heading);margin:0 0 .6em}
+.hero h1{word-break:normal;overflow-wrap:anywhere}
+
+/* ====== Responsive ====== */
+@media (max-width:1200px){
+  .hero .image img{width:min(48vw,560px)}
+}
+@media (max-width:1024px){ /* iPad含む */
+  .global-nav{display:none}
+  .nav-toggle{display:block}
+  .hero .inner{grid-template-columns:1fr}
+  .hero .image{order:2;justify-self:center}
+  .hero .image img{width:min(80vw,560px)}
+  .grid-3{grid-template-columns:1fr}
+}
+@media (max-width:600px){
+  .site-header{height:60px}
+  .brand-logo img{height:36px}
+  .btn-primary{padding:9px 14px;border-radius:10px}
+}
+
+/* モーション装飾の保険（切れ対策） */
+@media (prefers-reduced-motion:reduce){
+  .hero--parallax,.has-decor{transform:none !important}
+}
