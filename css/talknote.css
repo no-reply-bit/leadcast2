@@ -219,7 +219,12 @@ body.has-reveal.is-ready .main-title .line::after{ width:100%; }
   box-shadow:0 6px 18px rgba(0,0,0,.12);
   transform-origin:left top; transition:transform .25s ease, padding .25s ease, border-radius .25s ease;
 }
-.brand-logo img{ width:120px; height:100px; object-fit:contain }
+.brand-logo img {
+  width: auto;         /* 幅は自動調整 */
+  height: 40px;        /* 高さ基準で小さく固定 */
+  object-fit: contain; /* 比率を崩さず収める */
+}
+
 .brand-text{ font-family:'TalknoteFont','Noto Sans JP',sans-serif; font-size:39px; font-weight:700; color:#3A3A3A; line-height:1 }
 
 /* ==== Scroll shrink ==== */
@@ -441,7 +446,7 @@ body.is-shrink .brand-text{ font-size:34px }
 /* [O] ボタン再定義（背景画像版との整合）                                       */
 /* -------------------------------------------------------------------------- */
 .btn-large { padding:16px 28px; font-size:18px; border-radius:999px; font-weight:700; }
-.btn-primary { background:#f2bd11; color:#3A3A3A; box-shadow:0 8px 20px rgba(58,58,58,0.4); }
+.btn-primary { background:#f2bd11; color:#F2F2F2; box-shadow:0 8px 20px rgba(58,58,58,0.4); }
 .btn-primary:hover { filter:brightness(1.05); }
 .btn-secondary { background:#F2F2F2; color:#f2bd11; border:2px solid #F2F2F2;border: 2px solid var(--c-blue, #0f46ff); }
 .btn-secondary:hover { background:transparent; color:#3A3A3A; }
