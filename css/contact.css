@@ -25,15 +25,10 @@
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
-  margin:0;
-  color:var(--c-text);
-  background:
-    radial-gradient(1200px 420px at 15% -120px, rgba(15,70,255,.06), transparent 60%),
-    radial-gradient(1200px 520px at 85% 120%, rgba(15,70,255,.05), transparent 60%),
-    #F2F2F2;
-  font: 16px/1.7 "Noto Sans JP", system-ui, -apple-system, Segoe UI, Roboto, "Hiragino Sans", "Yu Gothic", sans-serif;
-  -webkit-font-smoothing:antialiased;
-  text-rendering:optimizeLegibility;
+  font-family: var(--font-body);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 .container{max-width:var(--max); margin-inline:auto; padding:0 20px}
 

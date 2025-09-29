@@ -955,10 +955,7 @@ body.page-top::before {
   max-width:62ch;
 }
 
-/* media */
-@media (max-width:1024px){
-  .about-title{ font-size: clamp(28px, 6vw, 48px); line-height:1.18; }
-}
+
 @media (max-width:900px){
   .about-grid{ grid-template-columns:1fr; }
   .about-media{ order:2; }
@@ -1606,11 +1603,6 @@ body.page-top::before {
 }
 body.no-scroll{overflow:hidden}
 
-/* === iOSで固定背景オフ（パララックスはJS側で十分） === */
-@media (max-width:1024px){
-  .bg-section{background-attachment:scroll}
-  body::before{position:absolute}
-}
 
 /* === Hero上部余白（固定ロゴ＋ノッチに備える） === */
 @media (max-width:640px){
